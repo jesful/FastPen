@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "487093885789",
+    "project_id": "fastpen-23447",
+    "storage_bucket": "fastpen-23447.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:487093885789:android:3a1376c82b6e427bba26b4",
+        "android_client_info": {
+          "package_name": "hcmute.edu.vn.fastpen"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "487093885789-8kn34847gdrr99i8jfa08b284g4sotu0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDQCxrVW-ieXpyiRcYoLkhjfx9UxVEeEN8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "487093885789-8kn34847gdrr99i8jfa08b284g4sotu0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

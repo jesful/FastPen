@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Fragment.TrangChuFragment">
+
+    <include
+        layout="@layout/top_trangchu"/>
+
+
+
+    <GridView
+        android:id="@+id/gridView_SanPham_TrangChu"
+        android:layout_width="match_parent"
+        android:layout_height="530dp"
+        android:numColumns="2"
+        android:verticalSpacing="8dp"
+        android:horizontalSpacing="8dp"
+        android:stretchMode="columnWidth"
+        android:gravity="center"
+        android:padding="8dp"/>
+</LinearLayout>

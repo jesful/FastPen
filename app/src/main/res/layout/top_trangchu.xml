@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/blue">
+
+    <LinearLayout
+        android:id="@+id/linearLayout_TimKiem_TrangChu"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_margin="8dp"
+        android:background="@color/white">
+
+        <ImageView
+            android:layout_width="28sp"
+            android:layout_height="28sp"
+            android:src="@drawable/ic_baseline_search_24"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="8dp"/>
+
+        <TextView
+            android:layout_width="314dp"
+            android:layout_height="wrap_content"
+            android:text="Tìm kiếm sản phẩm..."
+            android:textSize="21sp"
+            android:textColor="@color/black"
+            android:layout_gravity="center_vertical"
+            android:paddingLeft="8dp"/>
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/imgView_GioHang_TrangChu"
+        android:layout_width="36sp"
+        android:layout_height="36sp"
+        android:src="@drawable/ic_baseline_shopping_cart_24"
+        android:layout_gravity="center_vertical" />
+</LinearLayout>
