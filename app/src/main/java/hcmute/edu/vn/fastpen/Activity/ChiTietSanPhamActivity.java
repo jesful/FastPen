@@ -6,6 +6,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -14,13 +16,21 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import hcmute.edu.vn.fastpen.Adapter.BinhLuanChiTietSanPhamAdapter;
@@ -35,10 +45,9 @@ import hcmute.edu.vn.fastpen.R;
 
 public class ChiTietSanPhamActivity extends AppCompatActivity
 {
-    private ImageView imgView_QuayVe_ChiTietSanPham, imgView_GioHang_ChiTietSanPham, imgView_HinhAnhSanPham_ChiTietSanPham;
+    private ImageView imgView_HinhAnhSanPham_ChiTietSanPham, imgView_HinhAnhThuongHieu_ChiTietSanPham;
     private TextView txtView_TenSanPham_ChiTietSanPham, txtView_SLBinhLuan_ChiTietSanPham, txtView_SLDaBan_ChiTietSanPham, txtView_SlHangConLai_ChiTietSanPham, txtView_Gia_ChiTietSanPham, txtView_TenDanhMuc_ChiTietSanPham, txtView_TenThuongHieu_ChiTietSanPham, txtView_MoTa_ChiTietSanPham, txtView_TenThuongHieu1_ChiTietSanPham, txtView_SLBinhLuan1_ChiTietSanPham, txtView_SoSaoSanPham_ChiTietSanPham, txtView_SoSaoSanPham1_ChiTietSanPham;
     private RatingBar ratingBar_SoSaoSanPham_ChiTietSanPham, ratingBar_SoSaoSanPham1_ChiTietSanPham;
-    private LinearLayout linearLayout_ThemHangVaoGio_ChiTietSanPham, linearLayout_XemTatCaBinhLuan_ChiTietSanPham;
     // Database Reference
     private DatabaseReference dbref;
     // Recycler View object
@@ -61,7 +70,7 @@ public class ChiTietSanPhamActivity extends AppCompatActivity
         setContentView(R.layout.activity_chi_tiet_san_pham);
 
         // Click vào icon mũi tên để quay về trang trước đó
-        imgView_QuayVe_ChiTietSanPham = findViewById(R.id.imgView_QuayVe_ChiTietSanPham);
+        ImageView imgView_QuayVe_ChiTietSanPham = findViewById(R.id.imgView_QuayVe_ChiTietSanPham);
         imgView_QuayVe_ChiTietSanPham.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -70,7 +79,7 @@ public class ChiTietSanPhamActivity extends AppCompatActivity
         });
 
         // Click vào hình icon giỏ hàng để chuyển sang trang giỏ hàng
-        imgView_GioHang_ChiTietSanPham = findViewById(R.id.imgView_GioHang_ChiTietSanPham);
+        ImageView imgView_GioHang_ChiTietSanPham = findViewById(R.id.imgView_GioHang_ChiTietSanPham);
         imgView_GioHang_ChiTietSanPham.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -94,7 +103,7 @@ public class ChiTietSanPhamActivity extends AppCompatActivity
 
         GetDataChiTietSanPham(id);
 
-        linearLayout_XemTatCaBinhLuan_ChiTietSanPham = findViewById(R.id.linearLayout_XemTatCaBinhLuan_ChiTietSanPham);
+        LinearLayout linearLayout_XemTatCaBinhLuan_ChiTietSanPham = findViewById(R.id.linearLayout_XemTatCaBinhLuan_ChiTietSanPham);
         linearLayout_XemTatCaBinhLuan_ChiTietSanPham.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -104,7 +113,7 @@ public class ChiTietSanPhamActivity extends AppCompatActivity
             }
         });
 
-        linearLayout_ThemHangVaoGio_ChiTietSanPham = findViewById(R.id.linearLayout_ThemHangVaoGio_ChiTietSanPham);
+        LinearLayout linearLayout_ThemHangVaoGio_ChiTietSanPham = findViewById(R.id.linearLayout_ThemHangVaoGio_ChiTietSanPham);
         linearLayout_ThemHangVaoGio_ChiTietSanPham.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view)
@@ -112,6 +121,41 @@ public class ChiTietSanPhamActivity extends AppCompatActivity
                 ThemHangVaoGio(id);
             }
         });
+    }
+
+    public void GetImage(ImageView imageView, String ten)
+    {
+        StorageReference storageReference = FirebaseStorage.getInstance().getReference("Image/" + ten);
+        try {
+            File localFile = File.createTempFile("tempfile", ".jpg");
+            storageReference.getFile(localFile)
+                    .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>()
+                    {
+                        @Override
+                        public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                            Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
+                            imageView.setImageBitmap(bitmap);
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener()
+                    {
+                        @Override
+                        public void onFailure(@NonNull Exception e)
+                        {
+
+                        }
+                    })
+                    .addOnProgressListener(new OnProgressListener<FileDownloadTask.TaskSnapshot>()
+                    {
+                        @Override
+                        public void onProgress(@NonNull FileDownloadTask.TaskSnapshot snapshot) {
+                            imageView.setImageResource(R.drawable.loading);
+                        }
+                    });
+        }
+        catch (IOException e){
+            e.printStackTrace();
+        }
     }
 
     private void GetDataChiTietSanPham(int id)
@@ -132,6 +176,8 @@ public class ChiTietSanPhamActivity extends AppCompatActivity
         txtView_TenDanhMuc_ChiTietSanPham = findViewById(R.id.txtView_TenDanhMuc_ChiTietSanPham);
         // Thương hiệu của sản phẩm
         txtView_TenThuongHieu_ChiTietSanPham = findViewById(R.id.txtView_TenThuongHieu_ChiTietSanPham);
+        // Hình ảnh thương hiệu của sản phẩm
+        imgView_HinhAnhThuongHieu_ChiTietSanPham = findViewById(R.id.imgView_HinhAnhThuongHieu_ChiTietSanPham);
         // Mô tả thêm về sản phẩm
         txtView_MoTa_ChiTietSanPham = findViewById(R.id.txtView_MoTa_ChiTietSanPham);
         // Thương hiệu của sản phẩm trong phần các sản phẩm cùng thương hiệu
@@ -158,6 +204,7 @@ public class ChiTietSanPhamActivity extends AppCompatActivity
 
                 if(sp != null)
                 {
+                    GetImage(imgView_HinhAnhSanPham_ChiTietSanPham,sp.getHinhAnh());
                     txtView_TenSanPham_ChiTietSanPham.setText(sp.getTenSanPham());
                     txtView_SLDaBan_ChiTietSanPham.setText(String.valueOf(sp.getSoLuongDaBan()));
                     txtView_SlHangConLai_ChiTietSanPham.setText(String.valueOf(sp.getSoLuong()));
@@ -188,6 +235,7 @@ public class ChiTietSanPhamActivity extends AppCompatActivity
                             ThuongHieu th = snapshot.getValue(ThuongHieu.class);
 
                             if (th != null) {
+                                GetImage(imgView_HinhAnhThuongHieu_ChiTietSanPham, th.getHinhAnhThuongHieu());
                                 txtView_TenThuongHieu_ChiTietSanPham.setText(th.getTenThuongHieu());
                                 txtView_TenThuongHieu1_ChiTietSanPham.setText(th.getTenThuongHieu());
                             }

@@ -1,15 +1,25 @@
 package hcmute.edu.vn.fastpen.Adapter;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import hcmute.edu.vn.fastpen.Model.SanPham;
@@ -64,18 +74,54 @@ public class SanPhamChiTietSanPhamAdapter extends RecyclerView.Adapter<SanPhamCh
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final MyView holder, int position)
+    public void onBindViewHolder(@NonNull final MyView holder, int i)
     {
         // Set the text of each item of
         // Recycler view with the list items
-        holder.txtView_TenSanPham.setText(arr_SanPham.get(position).getTenSanPham());
-        holder.txtView_SLDaBan.setText(String.valueOf(arr_SanPham.get(position).getSoLuongDaBan()));
-        holder.txtView_GiaTien.setText(String.valueOf(arr_SanPham.get(position).getGia()));
+        GetImage(holder.imgView_HinhAnhSanPham, arr_SanPham.get(i).getHinhAnh());
+        holder.txtView_TenSanPham.setText(arr_SanPham.get(i).getTenSanPham());
+        holder.txtView_SLDaBan.setText(String.valueOf(arr_SanPham.get(i).getSoLuongDaBan()));
+        holder.txtView_GiaTien.setText(String.valueOf(arr_SanPham.get(i).getGia()));
     }
 
     @Override
     public int getItemCount()
     {
         return arr_SanPham.size();
+    }
+
+    public void GetImage(ImageView imageView, String ten)
+    {
+        StorageReference storageReference = FirebaseStorage.getInstance().getReference("Image/" + ten);
+        try {
+            File localFile = File.createTempFile("tempfile", ".jpg");
+            storageReference.getFile(localFile)
+                    .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>()
+                    {
+                        @Override
+                        public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                            Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
+                            imageView.setImageBitmap(bitmap);
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener()
+                    {
+                        @Override
+                        public void onFailure(@NonNull Exception e)
+                        {
+
+                        }
+                    })
+                    .addOnProgressListener(new OnProgressListener<FileDownloadTask.TaskSnapshot>()
+                    {
+                        @Override
+                        public void onProgress(@NonNull FileDownloadTask.TaskSnapshot snapshot) {
+                            imageView.setImageResource(R.drawable.loading);
+                        }
+                    });
+        }
+        catch (IOException e){
+            e.printStackTrace();
+        }
     }
 }

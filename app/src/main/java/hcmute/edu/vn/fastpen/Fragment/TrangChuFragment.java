@@ -1,7 +1,6 @@
 package hcmute.edu.vn.fastpen.Fragment;
 
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -27,11 +26,8 @@ import hcmute.edu.vn.fastpen.Activity.ChiTietSanPhamActivity;
 import hcmute.edu.vn.fastpen.Activity.GioHangActivity;
 import hcmute.edu.vn.fastpen.Activity.TimKiemActivity;
 import hcmute.edu.vn.fastpen.Adapter.SanPhamTrangChuAdapter;
-import hcmute.edu.vn.fastpen.Global;
 import hcmute.edu.vn.fastpen.Model.BinhLuan;
 import hcmute.edu.vn.fastpen.Model.DanhMuc;
-import hcmute.edu.vn.fastpen.Model.GioHang;
-import hcmute.edu.vn.fastpen.Model.HoaDon;
 import hcmute.edu.vn.fastpen.Model.SanPham;
 import hcmute.edu.vn.fastpen.Model.TaiKhoan;
 import hcmute.edu.vn.fastpen.Model.ThuongHieu;
@@ -39,10 +35,8 @@ import hcmute.edu.vn.fastpen.R;
 
 public class TrangChuFragment extends Fragment
 {
-    private LinearLayout linearLayout_TimKiem_TrangChu;
-    private ImageView imgView_GioHang_TrangChu;
-    private GridView gridView_SanPham_TrangChu;
     private ArrayList<SanPham> arr_SanPham;
+    private GridView gridView_SanPham_TrangChu;
     private SanPhamTrangChuAdapter sanPhamTrangChuAdapter;
     private DatabaseReference dbref;
 
@@ -57,7 +51,7 @@ public class TrangChuFragment extends Fragment
         View view =  inflater.inflate(R.layout.fragment_trang_chu, container, false);
 
         // Click vào linear layout khung tìm kiếm để chuyển sang trang tìm kiếm và lọc sản phẩm
-        linearLayout_TimKiem_TrangChu = view.findViewById(R.id.linearLayout_TimKiem_TrangChu);
+        LinearLayout linearLayout_TimKiem_TrangChu = view.findViewById(R.id.linearLayout_TimKiem_TrangChu);
         linearLayout_TimKiem_TrangChu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -67,7 +61,7 @@ public class TrangChuFragment extends Fragment
         });
 
         // Click vào hình icon giỏ hàng để chuyển sang trang giỏ hàng
-        imgView_GioHang_TrangChu = view.findViewById(R.id.imgView_GioHang_TrangChu);
+        ImageView imgView_GioHang_TrangChu = view.findViewById(R.id.imgView_GioHang_TrangChu);
         imgView_GioHang_TrangChu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -80,9 +74,6 @@ public class TrangChuFragment extends Fragment
         gridView_SanPham_TrangChu = view.findViewById(R.id.gridView_SanPham_TrangChu);
         // Array list các sản phẩm
         arr_SanPham = new ArrayList<>();
-        // Adapter dùng để đưa danh sách sản phẩm lên grid view, tham số vào là activity hiện tại, layout của các ô trong grid view và array list SanPham
-        sanPhamTrangChuAdapter = new SanPhamTrangChuAdapter(getActivity(), R.layout.cell_sanpham, arr_SanPham);
-        gridView_SanPham_TrangChu.setAdapter(sanPhamTrangChuAdapter);
 
         //AddData();
         // Lấy dữ liệu sản phẩm trên firebase và dùng adapter để đổ dữ liệu lên grid view
@@ -244,19 +235,23 @@ public class TrangChuFragment extends Fragment
     private void GetDataSanPham()
     {
         dbref = FirebaseDatabase.getInstance().getReference("SanPham");
-        // Làm trống mảng
-        arr_SanPham.clear();
 
         dbref.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
+            public void onDataChange(@NonNull DataSnapshot snapshot)
+            {
+                // Làm trống mảng
+                arr_SanPham.clear();
+
                 for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
                     SanPham sp = dataSnapshot.getValue(SanPham.class);
                     arr_SanPham.add(sp);
                 }
 
                 // Sau khi đã lấy hết dữ liệu xuống mảng thì dùng adapter để đổ dữ liệu lên grid view
-                sanPhamTrangChuAdapter.notifyDataSetChanged();
+                // Adapter dùng để đưa danh sách sản phẩm lên grid view, tham số vào là activity hiện tại, layout của các ô trong grid view và array list SanPham
+                sanPhamTrangChuAdapter = new SanPhamTrangChuAdapter(getActivity(), R.layout.cell_sanpham, arr_SanPham);
+                gridView_SanPham_TrangChu.setAdapter(sanPhamTrangChuAdapter);
             }
 
             @Override

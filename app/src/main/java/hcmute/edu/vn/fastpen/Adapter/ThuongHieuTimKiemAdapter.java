@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import hcmute.edu.vn.fastpen.Model.DanhMuc;
 import hcmute.edu.vn.fastpen.Model.ThuongHieu;
 import hcmute.edu.vn.fastpen.R;
 

@@ -1,11 +1,8 @@
 package hcmute.edu.vn.fastpen.Activity;
 
-import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -15,9 +12,7 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -36,8 +31,13 @@ import hcmute.edu.vn.fastpen.R;
 
 public class TimKiemActivity extends AppCompatActivity
 {
-    private ImageView imgView_QuayVe_TimKiem, imgView_Loc_TimKiem;
-    private LinearLayout linearLayout_Loc_TimKiem, linearLayout_ThietLapLoc_TimKiem, linearLayout_LocTheoDanhMuc_TimKiem, linearLayout_LocTheoThuongHieu_TimKiem, linearLayout_LocTheoGia_TimKiem, linearLayout_LocTheoGia1_TimKiem, linearLayout_ApDungLoc_TimKiem, linearLayout_ThietLapLai_TimKiem, linearLayout_ApDung_TimKiem;
+    private ImageView imgView_Loc_TimKiem;
+    private LinearLayout linearLayout_ThietLapLoc_TimKiem;
+    private LinearLayout linearLayout_LocTheoDanhMuc_TimKiem;
+    private LinearLayout linearLayout_LocTheoThuongHieu_TimKiem;
+    private LinearLayout linearLayout_LocTheoGia_TimKiem;
+    private LinearLayout linearLayout_LocTheoGia1_TimKiem;
+    private LinearLayout linearLayout_ApDungLoc_TimKiem;
     private GridView gridView_SanPham_TimKiem, gridView_LocDanhMuc_TimKiem, gridView_LocThuongHieu_TimKiem;
     private EditText editTxt_TimKiem_TimKiem, editTxt_LocTheoGiaTu_TimKiem, editTxt_LocTheoGiaDen_TimKiem;
     private ArrayList<SanPham> arr_SanPham;
@@ -56,7 +56,7 @@ public class TimKiemActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tim_kiem);
 
-        imgView_QuayVe_TimKiem = findViewById(R.id.imgView_QuayVe_TimKiem);
+        ImageView imgView_QuayVe_TimKiem = findViewById(R.id.imgView_QuayVe_TimKiem);
         imgView_QuayVe_TimKiem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -68,7 +68,7 @@ public class TimKiemActivity extends AppCompatActivity
         imgView_Loc_TimKiem = findViewById(R.id.imgView_Loc_TimKiem);
         linearLayout_ApDungLoc_TimKiem = findViewById(R.id.linearLayout_ApDungLoc_TimKiem);
 
-        linearLayout_Loc_TimKiem = findViewById(R.id.linearLayout_Loc_TimKiem);
+        LinearLayout linearLayout_Loc_TimKiem = findViewById(R.id.linearLayout_Loc_TimKiem);
         linearLayout_Loc_TimKiem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -259,7 +259,7 @@ public class TimKiemActivity extends AppCompatActivity
             }
         });
 
-        linearLayout_ThietLapLai_TimKiem = findViewById(R.id.linearLayout_ThietLapLai_TimKiem);
+        LinearLayout linearLayout_ThietLapLai_TimKiem = findViewById(R.id.linearLayout_ThietLapLai_TimKiem);
         linearLayout_ThietLapLai_TimKiem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -280,7 +280,7 @@ public class TimKiemActivity extends AppCompatActivity
             }
         });
 
-        linearLayout_ApDung_TimKiem = findViewById(R.id.linearLayout_ApDung_TimKiem);
+        LinearLayout linearLayout_ApDung_TimKiem = findViewById(R.id.linearLayout_ApDung_TimKiem);
         linearLayout_ApDung_TimKiem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view)

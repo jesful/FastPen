@@ -154,7 +154,7 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_marginLeft="8dp"
-                    android:layout_gravity="center"/>
+                    android:layout_gravity="center" />
 
                 <TextView
                     android:id="@+id/txtView_PhuongThucThanhToan_ThanhToan"
