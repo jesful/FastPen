@@ -15,17 +15,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <ImageView
-                android:id="@+id/imgView_HinhAnhTaiKhoan_BinhLuan"
-                android:layout_width="60dp"
-                android:layout_height="60dp" />
-
             <TextView
                 android:id="@+id/txtView_Ten_BinhLuan"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:paddingLeft="8dp"
                 android:text="Tên người đăng bình luận"
                 android:textColor="@color/black"
                 android:textSize="22sp" />

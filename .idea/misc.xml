@@ -5,25 +5,25 @@
       <map>
         <entry key="..\:/GitHub/FastPen/app/src/main/res/drawable-v24/border_hinh.xml" value="0.1825" />
         <entry key="..\:/GitHub/FastPen/app/src/main/res/layout/activity_chi_tiet_san_pham.xml" value="0.14447463768115942" />
-        <entry key="..\:/GitHub/FastPen/app/src/main/res/layout/activity_gio_hang.xml" value="0.12158054711246201" />
+        <entry key="..\:/GitHub/FastPen/app/src/main/res/layout/activity_gio_hang.xml" value="0.264" />
         <entry key="..\:/GitHub/FastPen/app/src/main/res/layout/activity_main.xml" value="0.12158054711246201" />
-        <entry key="..\:/GitHub/FastPen/app/src/main/res/layout/activity_phuong_thuc_thanh_toan.xml" value="0.12158054711246201" />
-        <entry key="..\:/GitHub/FastPen/app/src/main/res/layout/activity_sua_dia_chi_nhan_hang.xml" value="0.12158054711246201" />
-        <entry key="..\:/GitHub/FastPen/app/src/main/res/layout/activity_tat_ca_binh_luan.xml" value="0.12158054711246201" />
+        <entry key="..\:/GitHub/FastPen/app/src/main/res/layout/activity_phuong_thuc_thanh_toan.xml" value="0.264" />
+        <entry key="..\:/GitHub/FastPen/app/src/main/res/layout/activity_sua_dia_chi_nhan_hang.xml" value="0.264" />
+        <entry key="..\:/GitHub/FastPen/app/src/main/res/layout/activity_tat_ca_binh_luan.xml" value="0.264" />
         <entry key="..\:/GitHub/FastPen/app/src/main/res/layout/activity_thanh_toan.xml" value="0.264" />
-        <entry key="..\:/GitHub/FastPen/app/src/main/res/layout/activity_tim_kiem.xml" value="0.12158054711246201" />
-        <entry key="..\:/GitHub/FastPen/app/src/main/res/layout/cell_loc.xml" value="0.12158054711246201" />
+        <entry key="..\:/GitHub/FastPen/app/src/main/res/layout/activity_tim_kiem.xml" value="0.264" />
+        <entry key="..\:/GitHub/FastPen/app/src/main/res/layout/cell_loc.xml" value="0.264" />
         <entry key="..\:/GitHub/FastPen/app/src/main/res/layout/cell_sanpham.xml" value="0.264" />
-        <entry key="..\:/GitHub/FastPen/app/src/main/res/layout/cell_sanpham_chitietsanpham.xml" value="0.12158054711246201" />
-        <entry key="..\:/GitHub/FastPen/app/src/main/res/layout/fragment_trang_chu.xml" value="0.12158054711246201" />
-        <entry key="..\:/GitHub/FastPen/app/src/main/res/layout/row_binhluan_chitietsanpham.xml" value="0.12158054711246201" />
-        <entry key="..\:/GitHub/FastPen/app/src/main/res/layout/row_sanpham_giohang.xml" value="0.12158054711246201" />
-        <entry key="..\:/GitHub/FastPen/app/src/main/res/layout/row_sanpham_thanhtoan.xml" value="0.12158054711246201" />
-        <entry key="..\:/GitHub/FastPen/app/src/main/res/layout/top_chitietsanpham.xml" value="0.12158054711246201" />
-        <entry key="..\:/GitHub/FastPen/app/src/main/res/layout/top_tatcabinhluan.xml" value="0.12158054711246201" />
-        <entry key="..\:/GitHub/FastPen/app/src/main/res/layout/top_thanhtoan.xml" value="0.12158054711246201" />
-        <entry key="..\:/GitHub/FastPen/app/src/main/res/layout/top_timkiem.xml" value="0.12158054711246201" />
-        <entry key="..\:/GitHub/FastPen/app/src/main/res/layout/top_trangchu.xml" value="0.12158054711246201" />
+        <entry key="..\:/GitHub/FastPen/app/src/main/res/layout/cell_sanpham_chitietsanpham.xml" value="0.264" />
+        <entry key="..\:/GitHub/FastPen/app/src/main/res/layout/fragment_trang_chu.xml" value="0.264" />
+        <entry key="..\:/GitHub/FastPen/app/src/main/res/layout/row_binhluan_chitietsanpham.xml" value="0.264" />
+        <entry key="..\:/GitHub/FastPen/app/src/main/res/layout/row_sanpham_giohang.xml" value="0.264" />
+        <entry key="..\:/GitHub/FastPen/app/src/main/res/layout/row_sanpham_thanhtoan.xml" value="0.264" />
+        <entry key="..\:/GitHub/FastPen/app/src/main/res/layout/top_chitietsanpham.xml" value="0.264" />
+        <entry key="..\:/GitHub/FastPen/app/src/main/res/layout/top_tatcabinhluan.xml" value="0.264" />
+        <entry key="..\:/GitHub/FastPen/app/src/main/res/layout/top_thanhtoan.xml" value="0.264" />
+        <entry key="..\:/GitHub/FastPen/app/src/main/res/layout/top_timkiem.xml" value="0.264" />
+        <entry key="..\:/GitHub/FastPen/app/src/main/res/layout/top_trangchu.xml" value="0.264" />
         <entry key="..\:/Study/Project/LTAndroid/FastPen/app/src/main/res/drawable-v24/border_cell_sanphamtronggio.xml" value="0.1915" />
         <entry key="..\:/Study/Project/LTAndroid/FastPen/app/src/main/res/drawable-v24/border_linearlayou_loctheososao_tatcabinhluan.xml" value="0.1615" />
         <entry key="..\:/Study/Project/LTAndroid/FastPen/app/src/main/res/drawable-v24/border_linearlayout_loctheososao1_tatcabinhluan.xml" value="0.1615" />

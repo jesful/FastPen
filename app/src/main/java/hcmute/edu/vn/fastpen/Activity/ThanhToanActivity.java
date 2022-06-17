@@ -28,34 +28,27 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-import hcmute.edu.vn.fastpen.Adapter.SanPhamGioHangAdapter;
 import hcmute.edu.vn.fastpen.Adapter.SanPhamThanhToanAdapter;
 import hcmute.edu.vn.fastpen.Global;
 import hcmute.edu.vn.fastpen.Model.ChiTietHoaDon;
 import hcmute.edu.vn.fastpen.Model.GioHang;
 import hcmute.edu.vn.fastpen.Model.HoaDon;
-import hcmute.edu.vn.fastpen.Model.SanPham;
 import hcmute.edu.vn.fastpen.Model.TaiKhoan;
 import hcmute.edu.vn.fastpen.R;
 
 public class ThanhToanActivity extends AppCompatActivity
 {
-    private ImageView imgView_QuayVe_ThanhToan, imgView_ChonDiaChiNhanHang_ThanhToan, imgView_HinhAnhThanhToan_ThanhToan, imgView_ChonPhuongThucThanhToan_ThanhToan;
+    private ImageView imgView_HinhAnhThanhToan_ThanhToan;
     private TextView txtView_Ten_ThanhToan, txtView_SDT_ThanhToan, txtView_Email_ThanhToan, txtView_DiaChi_ThanhToan, txtView_PhuongThucThanhToan_ThanhToan, txtView_TienHang_ThanhToan, txtView_PhiVanChuyen_ThanhToan, txtView_GiaTongCong_ThanhToan;
     private EditText editTxt_GhiChu_ThanhToan;
-    private LinearLayout linearLayout_DatHang_ThanhToan;
     // Database Reference
     private DatabaseReference dbref;
     // Recycler View object
     private RecyclerView recyclerView_SanPhamTrongGio_ThanhToan;
     // Array list for recycler view data source
     private ArrayList<GioHang> arr_GioHang;
-    // Layout Manager
-    private RecyclerView.LayoutManager recyclerViewLayoutManager;
     // Adapter class object
     private SanPhamThanhToanAdapter sanPhamThanhToanAdapter;
-    // Linear Layout Manager
-    private LinearLayoutManager linearLayoutManager;
 
     SharedPreferences sharedPreferences;
 
@@ -64,7 +57,7 @@ public class ThanhToanActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_thanh_toan);
 
-        imgView_QuayVe_ThanhToan = findViewById(R.id.imgView_QuayVe_ThanhToan);
+        ImageView imgView_QuayVe_ThanhToan = findViewById(R.id.imgView_QuayVe_ThanhToan);
         imgView_QuayVe_ThanhToan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -79,7 +72,7 @@ public class ThanhToanActivity extends AppCompatActivity
         GetDataTaiKhoan();
 
         sharedPreferences = getSharedPreferences("dataGiaoHang", MODE_PRIVATE);
-        imgView_ChonDiaChiNhanHang_ThanhToan = findViewById(R.id.imgView_ChonDiaChiNhanHang_ThanhToan);
+        ImageView imgView_ChonDiaChiNhanHang_ThanhToan = findViewById(R.id.imgView_ChonDiaChiNhanHang_ThanhToan);
         imgView_ChonDiaChiNhanHang_ThanhToan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view)
@@ -105,11 +98,12 @@ public class ThanhToanActivity extends AppCompatActivity
         GetDataSanPhamGioHang();
 
         txtView_PhuongThucThanhToan_ThanhToan = findViewById(R.id.txtView_PhuongThucThanhToan_ThanhToan);
-        txtView_PhuongThucThanhToan_ThanhToan.setText("Thanh toán tiền mặt");
+        String ptttMacDinh = "Thanh toán tiền mặt";
+        txtView_PhuongThucThanhToan_ThanhToan.setText(ptttMacDinh);
         imgView_HinhAnhThanhToan_ThanhToan = findViewById(R.id.imgView_HinhAnhThanhToan_ThanhToan);
         imgView_HinhAnhThanhToan_ThanhToan.setImageResource(R.drawable.icon_payment_method_cod);
 
-        imgView_ChonPhuongThucThanhToan_ThanhToan = findViewById(R.id.imgView_ChonPhuongThucThanhToan_ThanhToan);
+        ImageView imgView_ChonPhuongThucThanhToan_ThanhToan = findViewById(R.id.imgView_ChonPhuongThucThanhToan_ThanhToan);
         imgView_ChonPhuongThucThanhToan_ThanhToan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -127,7 +121,7 @@ public class ThanhToanActivity extends AppCompatActivity
 
         editTxt_GhiChu_ThanhToan = findViewById(R.id.editTxt_GhiChu_ThanhToan);
 
-        linearLayout_DatHang_ThanhToan = findViewById(R.id.linearLayout_DatHang_ThanhToan);
+        LinearLayout linearLayout_DatHang_ThanhToan = findViewById(R.id.linearLayout_DatHang_ThanhToan);
         linearLayout_DatHang_ThanhToan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view)
@@ -155,9 +149,6 @@ public class ThanhToanActivity extends AppCompatActivity
                 txtView_SDT_ThanhToan.setText(data.getStringExtra("sdt"));
                 txtView_Email_ThanhToan.setText(data.getStringExtra("email"));
                 txtView_DiaChi_ThanhToan.setText(data.getStringExtra("diachi"));
-            } else
-            {
-                // Không xác nhận thay đổi dữ liệu địa chỉ nhận hàng, không đối dữ liệu địa chỉ nhận hàng trên trang thanh toán.
             }
         }
 
@@ -194,9 +185,6 @@ public class ThanhToanActivity extends AppCompatActivity
                         imgView_HinhAnhThanhToan_ThanhToan.setImageResource(R.drawable.icon_payment_method_credit);
                         break;
                 }
-            } else
-            {
-                // Không xác nhận thay đổi dữ liệu địa chỉ nhận hàng, không đối dữ liệu địa chỉ nhận hàng trên trang thanh toán.
             }
         }
     }
@@ -247,7 +235,8 @@ public class ThanhToanActivity extends AppCompatActivity
             int finalI = i;
             dbref.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                public void onDataChange(@NonNull DataSnapshot snapshot)
+                {
                     int gia = snapshot.getValue(Integer.class);
 
                     giahang[0] = giahang[0] + gia * arr_GioHang.get(finalI).getSoLuong();
@@ -269,14 +258,16 @@ public class ThanhToanActivity extends AppCompatActivity
         // Lấy dữ liệu sản phẩm trong giỏ và đổ lên recycler view
         // initialisation with id's
         recyclerView_SanPhamTrongGio_ThanhToan = findViewById(R.id.recyclerView_SanPhamTrongGio_ThanhToan);
-        recyclerViewLayoutManager = new LinearLayoutManager(getApplicationContext());
+        // Layout Manager
+        RecyclerView.LayoutManager recyclerViewLayoutManager = new LinearLayoutManager(getApplicationContext());
 
         // Set LayoutManager on Recycler View
         recyclerView_SanPhamTrongGio_ThanhToan.setLayoutManager(recyclerViewLayoutManager);
 
         // Set Horizontal Layout Manager
         // for Recycler view
-        linearLayoutManager = new LinearLayoutManager(ThanhToanActivity.this, LinearLayoutManager.VERTICAL, false);
+        // Linear Layout Manager
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(ThanhToanActivity.this, LinearLayoutManager.VERTICAL, false);
         recyclerView_SanPhamTrongGio_ThanhToan.setLayoutManager(linearLayoutManager);
 
         // Lấy dữ liệu trên firebase và thêm vào array list

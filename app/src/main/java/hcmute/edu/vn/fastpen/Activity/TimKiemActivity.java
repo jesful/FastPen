@@ -2,7 +2,10 @@ package hcmute.edu.vn.fastpen.Activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -38,7 +41,8 @@ public class TimKiemActivity extends AppCompatActivity
     private LinearLayout linearLayout_LocTheoGia_TimKiem;
     private LinearLayout linearLayout_LocTheoGia1_TimKiem;
     private LinearLayout linearLayout_ApDungLoc_TimKiem;
-    private GridView gridView_SanPham_TimKiem, gridView_LocDanhMuc_TimKiem, gridView_LocThuongHieu_TimKiem;
+    private RecyclerView recyclerView_SanPham_TimKiem;
+    private GridView gridView_LocDanhMuc_TimKiem, gridView_LocThuongHieu_TimKiem;
     private EditText editTxt_TimKiem_TimKiem, editTxt_LocTheoGiaTu_TimKiem, editTxt_LocTheoGiaDen_TimKiem;
     private ArrayList<SanPham> arr_SanPham;
     private ArrayList<DanhMuc> arr_DanhMuc;
@@ -167,14 +171,25 @@ public class TimKiemActivity extends AppCompatActivity
             }
         });
 
-        // Lấy danh sách sản phẩm
-        gridView_SanPham_TimKiem = findViewById(R.id.gridView_SanPham_TimKiem);
         // Array list các sản phẩm
         arr_SanPham = new ArrayList<>();
-
         // Lấy dữ liệu sản phẩm trên firebase và dùng adapter để đổ dữ liệu lên grid view
         GetDataSanPham();
-
+/*
+        // Xem thông tin chi tiết sản phẩm khi click vào sản phẩm
+        gridView_SanPham_TimKiem.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l)
+            {
+                // Chuyển qua trang Chi tiết sản phẩm
+                Intent intent = new Intent(TimKiemActivity.this, ChiTietSanPhamActivity.class);
+                // Lưu trữ lại id của sản phẩm bằng putExtra
+                intent.putExtra("id", arr_SanPham.get(i).getIdSanPham());
+                startActivity(intent);
+            }
+        });
+*/
         editTxt_LocTheoGiaTu_TimKiem = findViewById(R.id.editTxt_LocTheoGiaTu_TimKiem);
         editTxt_LocTheoGiaDen_TimKiem = findViewById(R.id.editTxt_LocTheoGiaDen_TimKiem);
 
@@ -304,12 +319,11 @@ public class TimKiemActivity extends AppCompatActivity
 
     private void GetDataSanPham()
     {
-        // Adapter dùng để đưa danh sách sản phẩm lên grid view, tham số vào là activity hiện tại, layout của các ô trong grid view và array list SanPham
-        sanPhamTrangChuAdapter = new SanPhamTrangChuAdapter(TimKiemActivity.this, R.layout.cell_sanpham, arr_SanPham);
-        gridView_SanPham_TimKiem.setAdapter(sanPhamTrangChuAdapter);
+        recyclerView_SanPham_TimKiem = findViewById(R.id.recyclerView_SanPham_TimKiem);
+        int numberOfColumns = 2;
+        recyclerView_SanPham_TimKiem.setLayoutManager(new GridLayoutManager(this, numberOfColumns));
 
         dbref = FirebaseDatabase.getInstance().getReference("SanPham");
-
         dbref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot)
@@ -319,13 +333,22 @@ public class TimKiemActivity extends AppCompatActivity
 
                 for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
                     SanPham sp = dataSnapshot.getValue(SanPham.class);
-                    if(sp != null) {
-                        arr_SanPham.add(sp);
-                    }
+                    arr_SanPham.add(sp);
                 }
 
-                // Sau khi đã lấy hết dữ liệu xuống mảng thì dùng adapter để đổ dữ liệu lên grid view
-                sanPhamTrangChuAdapter.notifyDataSetChanged();
+                // Sau khi đã lấy hết dữ liệu xuống mảng thì dùng adapter để đổ dữ liệu lên recycler view
+                sanPhamTrangChuAdapter = new SanPhamTrangChuAdapter(arr_SanPham, new SanPhamTrangChuAdapter.OnItemClickListener()
+                {
+                    @Override
+                    public void onItemClick(View view, int i) {
+                        // Chuyển qua trang Chi tiết sản phẩm
+                        Intent intent = new Intent(TimKiemActivity.this, ChiTietSanPhamActivity.class);
+                        // Lưu trữ lại id của sản phẩm bằng putExtra
+                        intent.putExtra("id", arr_SanPham.get(i).getIdSanPham());
+                        startActivity(intent);
+                    }
+                });
+                recyclerView_SanPham_TimKiem.setAdapter(sanPhamTrangChuAdapter);
             }
 
             @Override
@@ -407,8 +430,18 @@ public class TimKiemActivity extends AppCompatActivity
 
                 if(((dem == 0) || (dem == arr_DanhMuc.size() + arr_ThuongHieu.size())) && locgiatu == 0 && locgiaden == 999999)
                 {
-                    // Adapter dùng để đưa danh sách sản phẩm lên grid view, tham số vào là activity hiện tại, layout của các ô trong grid view và array list SanPham
-                    sanPhamTrangChuAdapter = new SanPhamTrangChuAdapter(TimKiemActivity.this, R.layout.cell_sanpham, arr_SanPham);
+                    // Sau khi đã lấy hết dữ liệu xuống mảng thì dùng adapter để đổ dữ liệu lên recycler view
+                    sanPhamTrangChuAdapter = new SanPhamTrangChuAdapter(arr_SanPham, new SanPhamTrangChuAdapter.OnItemClickListener()
+                    {
+                        @Override
+                        public void onItemClick(View view, int i) {
+                            // Chuyển qua trang Chi tiết sản phẩm
+                            Intent intent = new Intent(TimKiemActivity.this, ChiTietSanPhamActivity.class);
+                            // Lưu trữ lại id của sản phẩm bằng putExtra
+                            intent.putExtra("id", arr_SanPham.get(i).getIdSanPham());
+                            startActivity(intent);
+                        }
+                    });
                 }
                 else
                     if (((dem == 0) || (dem == arr_DanhMuc.size() + arr_ThuongHieu.size())) && (locgiatu != 0 || locgiaden != 999999))
@@ -420,8 +453,18 @@ public class TimKiemActivity extends AppCompatActivity
                                 arr_SanPhamTemp.add(arr_SanPham.get(i));
                             }
                         }
-                        // Adapter dùng để đưa danh sách sản phẩm lên grid view, tham số vào là activity hiện tại, layout của các ô trong grid view và array list SanPham
-                        sanPhamTrangChuAdapter = new SanPhamTrangChuAdapter(TimKiemActivity.this, R.layout.cell_sanpham, arr_SanPhamTemp);
+                        // Sau khi đã lấy hết dữ liệu xuống mảng thì dùng adapter để đổ dữ liệu lên recycler view
+                        sanPhamTrangChuAdapter = new SanPhamTrangChuAdapter(arr_SanPhamTemp, new SanPhamTrangChuAdapter.OnItemClickListener()
+                        {
+                            @Override
+                            public void onItemClick(View view, int i) {
+                                // Chuyển qua trang Chi tiết sản phẩm
+                                Intent intent = new Intent(TimKiemActivity.this, ChiTietSanPhamActivity.class);
+                                // Lưu trữ lại id của sản phẩm bằng putExtra
+                                intent.putExtra("id", arr_SanPham.get(i).getIdSanPham());
+                                startActivity(intent);
+                            }
+                        });
                     }
                     else
                         if(((dem != 0) && (dem != arr_DanhMuc.size() + arr_ThuongHieu.size())) && locgiatu == 0 && locgiaden == 999999)
@@ -477,8 +520,18 @@ public class TimKiemActivity extends AppCompatActivity
                                     }
                                 }
 
-                            // Adapter dùng để đưa danh sách sản phẩm lên grid view, tham số vào là activity hiện tại, layout của các ô trong grid view và array list SanPham
-                            sanPhamTrangChuAdapter = new SanPhamTrangChuAdapter(TimKiemActivity.this, R.layout.cell_sanpham, arr_SanPhamTemp);
+                            // Sau khi đã lấy hết dữ liệu xuống mảng thì dùng adapter để đổ dữ liệu lên recycler view
+                            sanPhamTrangChuAdapter = new SanPhamTrangChuAdapter(arr_SanPhamTemp, new SanPhamTrangChuAdapter.OnItemClickListener()
+                            {
+                                @Override
+                                public void onItemClick(View view, int i) {
+                                    // Chuyển qua trang Chi tiết sản phẩm
+                                    Intent intent = new Intent(TimKiemActivity.this, ChiTietSanPhamActivity.class);
+                                    // Lưu trữ lại id của sản phẩm bằng putExtra
+                                    intent.putExtra("id", arr_SanPham.get(i).getIdSanPham());
+                                    startActivity(intent);
+                                }
+                            });
                         }
                         else
                         {
@@ -542,11 +595,21 @@ public class TimKiemActivity extends AppCompatActivity
                                     }
                                 }
 
-                            // Adapter dùng để đưa danh sách sản phẩm lên grid view, tham số vào là activity hiện tại, layout của các ô trong grid view và array list SanPham
-                            sanPhamTrangChuAdapter = new SanPhamTrangChuAdapter(TimKiemActivity.this, R.layout.cell_sanpham, arr_SanPhamTemp);
+                            // Sau khi đã lấy hết dữ liệu xuống mảng thì dùng adapter để đổ dữ liệu lên recycler view
+                            sanPhamTrangChuAdapter = new SanPhamTrangChuAdapter(arr_SanPhamTemp, new SanPhamTrangChuAdapter.OnItemClickListener()
+                            {
+                                @Override
+                                public void onItemClick(View view, int i) {
+                                    // Chuyển qua trang Chi tiết sản phẩm
+                                    Intent intent = new Intent(TimKiemActivity.this, ChiTietSanPhamActivity.class);
+                                    // Lưu trữ lại id của sản phẩm bằng putExtra
+                                    intent.putExtra("id", arr_SanPham.get(i).getIdSanPham());
+                                    startActivity(intent);
+                                }
+                            });
                         }
 
-                gridView_SanPham_TimKiem.setAdapter(sanPhamTrangChuAdapter);
+                recyclerView_SanPham_TimKiem.setAdapter(sanPhamTrangChuAdapter);
             }
 
             @Override

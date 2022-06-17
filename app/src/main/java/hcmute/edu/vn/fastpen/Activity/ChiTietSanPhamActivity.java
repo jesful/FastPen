@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,6 +49,7 @@ public class ChiTietSanPhamActivity extends AppCompatActivity
     private ImageView imgView_HinhAnhSanPham_ChiTietSanPham, imgView_HinhAnhThuongHieu_ChiTietSanPham;
     private TextView txtView_TenSanPham_ChiTietSanPham, txtView_SLBinhLuan_ChiTietSanPham, txtView_SLDaBan_ChiTietSanPham, txtView_SlHangConLai_ChiTietSanPham, txtView_Gia_ChiTietSanPham, txtView_TenDanhMuc_ChiTietSanPham, txtView_TenThuongHieu_ChiTietSanPham, txtView_MoTa_ChiTietSanPham, txtView_TenThuongHieu1_ChiTietSanPham, txtView_SLBinhLuan1_ChiTietSanPham, txtView_SoSaoSanPham_ChiTietSanPham, txtView_SoSaoSanPham1_ChiTietSanPham;
     private RatingBar ratingBar_SoSaoSanPham_ChiTietSanPham, ratingBar_SoSaoSanPham1_ChiTietSanPham;
+    private ProgressBar progressBar_HinhAnhSanPham_ChiTietSanPham, progressBar_HinhAnhThuongHieu_ChiTietSanPham;
     // Database Reference
     private DatabaseReference dbref;
     // Recycler View object
@@ -123,7 +125,7 @@ public class ChiTietSanPhamActivity extends AppCompatActivity
         });
     }
 
-    public void GetImage(ImageView imageView, String ten)
+    public void GetImage(ImageView imageView, String ten, ProgressBar progressBar)
     {
         StorageReference storageReference = FirebaseStorage.getInstance().getReference("Image/" + ten);
         try {
@@ -133,6 +135,7 @@ public class ChiTietSanPhamActivity extends AppCompatActivity
                     {
                         @Override
                         public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                            progressBar.setVisibility(View.GONE);
                             Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
                             imageView.setImageBitmap(bitmap);
                         }
@@ -149,7 +152,8 @@ public class ChiTietSanPhamActivity extends AppCompatActivity
                     {
                         @Override
                         public void onProgress(@NonNull FileDownloadTask.TaskSnapshot snapshot) {
-                            imageView.setImageResource(R.drawable.loading);
+                            progressBar.setVisibility(View.VISIBLE);
+                            imageView.setImageResource(R.drawable.plain_white_background_211387);
                         }
                     });
         }
@@ -162,6 +166,8 @@ public class ChiTietSanPhamActivity extends AppCompatActivity
     {
         // Hình ảnh sản phẩm
         imgView_HinhAnhSanPham_ChiTietSanPham = findViewById(R.id.imgView_HinhAnhSanPham_ChiTietSanPham);
+        // Progress Bar chờ đợi trong lúc load hình ảnh sản phẩm
+        progressBar_HinhAnhSanPham_ChiTietSanPham = findViewById(R.id.progressBar_HinhAnhSanPham_ChiTietSanPham);
         // Tên sản phẩm
         txtView_TenSanPham_ChiTietSanPham = findViewById(R.id.txtView_TenSanPham_ChiTietSanPham);
         // Số lượng bình luận của khách hàng đối với sản phẩm
@@ -178,6 +184,8 @@ public class ChiTietSanPhamActivity extends AppCompatActivity
         txtView_TenThuongHieu_ChiTietSanPham = findViewById(R.id.txtView_TenThuongHieu_ChiTietSanPham);
         // Hình ảnh thương hiệu của sản phẩm
         imgView_HinhAnhThuongHieu_ChiTietSanPham = findViewById(R.id.imgView_HinhAnhThuongHieu_ChiTietSanPham);
+        // Progress Bar chờ đợi trong lúc load hình ảnh thương hiệu
+        progressBar_HinhAnhThuongHieu_ChiTietSanPham = findViewById(R.id.progressBar_HinhAnhThuongHieu_ChiTietSanPham);
         // Mô tả thêm về sản phẩm
         txtView_MoTa_ChiTietSanPham = findViewById(R.id.txtView_MoTa_ChiTietSanPham);
         // Thương hiệu của sản phẩm trong phần các sản phẩm cùng thương hiệu
@@ -204,7 +212,7 @@ public class ChiTietSanPhamActivity extends AppCompatActivity
 
                 if(sp != null)
                 {
-                    GetImage(imgView_HinhAnhSanPham_ChiTietSanPham,sp.getHinhAnh());
+                    GetImage(imgView_HinhAnhSanPham_ChiTietSanPham,sp.getHinhAnh(),progressBar_HinhAnhSanPham_ChiTietSanPham);
                     txtView_TenSanPham_ChiTietSanPham.setText(sp.getTenSanPham());
                     txtView_SLDaBan_ChiTietSanPham.setText(String.valueOf(sp.getSoLuongDaBan()));
                     txtView_SlHangConLai_ChiTietSanPham.setText(String.valueOf(sp.getSoLuong()));
@@ -235,7 +243,7 @@ public class ChiTietSanPhamActivity extends AppCompatActivity
                             ThuongHieu th = snapshot.getValue(ThuongHieu.class);
 
                             if (th != null) {
-                                GetImage(imgView_HinhAnhThuongHieu_ChiTietSanPham, th.getHinhAnhThuongHieu());
+                                GetImage(imgView_HinhAnhThuongHieu_ChiTietSanPham, th.getHinhAnhThuongHieu(), progressBar_HinhAnhThuongHieu_ChiTietSanPham);
                                 txtView_TenThuongHieu_ChiTietSanPham.setText(th.getTenThuongHieu());
                                 txtView_TenThuongHieu1_ChiTietSanPham.setText(th.getTenThuongHieu());
                             }

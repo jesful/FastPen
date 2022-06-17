@@ -13,7 +13,8 @@ public class TaiKhoan
     public TaiKhoan() {
     }
 
-    public TaiKhoan(String tenTaiKhoan, String matKhau, String ten, String diaChi, String sdt, String email, boolean quyen) {
+    public TaiKhoan(String tenTaiKhoan, String matKhau, String ten, String diaChi, String sdt, String email, boolean quyen)
+    {
         TenTaiKhoan = tenTaiKhoan;
         MatKhau = matKhau;
         Ten = ten;

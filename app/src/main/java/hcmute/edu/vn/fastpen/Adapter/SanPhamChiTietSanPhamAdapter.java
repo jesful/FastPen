@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -30,14 +31,17 @@ import hcmute.edu.vn.fastpen.R;
 public class SanPhamChiTietSanPhamAdapter extends RecyclerView.Adapter<SanPhamChiTietSanPhamAdapter.MyView>
 {
     // List with String type
-    private ArrayList<SanPham> arr_SanPham;
+    private final ArrayList<SanPham> arr_SanPham;
 
     // View Holder class which
     // extends RecyclerView.ViewHolder
-    public class MyView extends RecyclerView.ViewHolder
+    public static class MyView extends RecyclerView.ViewHolder
     {
-        private ImageView imgView_HinhAnhSanPham;
-        private TextView txtView_TenSanPham, txtView_SLDaBan, txtView_GiaTien;
+        private final ImageView imgView_HinhAnhSanPham;
+        private final TextView txtView_TenSanPham;
+        private final TextView txtView_SLDaBan;
+        private final TextView txtView_GiaTien;
+        private final ProgressBar progressBar_HinhAnhSanPham;
 
         // parameterised constructor for View Holder class
         // which takes the view as a parameter
@@ -50,6 +54,7 @@ public class SanPhamChiTietSanPhamAdapter extends RecyclerView.Adapter<SanPhamCh
             txtView_TenSanPham = view.findViewById(R.id.txtView_TenSanPham);
             txtView_SLDaBan = view.findViewById(R.id.txtView_SLDaBan);
             txtView_GiaTien = view.findViewById(R.id.txtView_GiaTien);
+            progressBar_HinhAnhSanPham = view.findViewById(R.id.progressBar_HinhAnhSanPham);
         }
     }
 
@@ -78,7 +83,7 @@ public class SanPhamChiTietSanPhamAdapter extends RecyclerView.Adapter<SanPhamCh
     {
         // Set the text of each item of
         // Recycler view with the list items
-        GetImage(holder.imgView_HinhAnhSanPham, arr_SanPham.get(i).getHinhAnh());
+        GetImage(holder.imgView_HinhAnhSanPham, arr_SanPham.get(i).getHinhAnh(), holder.progressBar_HinhAnhSanPham);
         holder.txtView_TenSanPham.setText(arr_SanPham.get(i).getTenSanPham());
         holder.txtView_SLDaBan.setText(String.valueOf(arr_SanPham.get(i).getSoLuongDaBan()));
         holder.txtView_GiaTien.setText(String.valueOf(arr_SanPham.get(i).getGia()));
@@ -90,7 +95,7 @@ public class SanPhamChiTietSanPhamAdapter extends RecyclerView.Adapter<SanPhamCh
         return arr_SanPham.size();
     }
 
-    public void GetImage(ImageView imageView, String ten)
+    public void GetImage(ImageView imageView, String ten, ProgressBar progressBar)
     {
         StorageReference storageReference = FirebaseStorage.getInstance().getReference("Image/" + ten);
         try {
@@ -100,6 +105,7 @@ public class SanPhamChiTietSanPhamAdapter extends RecyclerView.Adapter<SanPhamCh
                     {
                         @Override
                         public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                            progressBar.setVisibility(View.GONE);
                             Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
                             imageView.setImageBitmap(bitmap);
                         }
@@ -116,7 +122,8 @@ public class SanPhamChiTietSanPhamAdapter extends RecyclerView.Adapter<SanPhamCh
                     {
                         @Override
                         public void onProgress(@NonNull FileDownloadTask.TaskSnapshot snapshot) {
-                            imageView.setImageResource(R.drawable.loading);
+                            progressBar.setVisibility(View.VISIBLE);
+                            imageView.setImageResource(R.drawable.plain_white_background_211387);
                         }
                     });
         }

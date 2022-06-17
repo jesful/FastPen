@@ -14,9 +14,9 @@ import hcmute.edu.vn.fastpen.R;
 
 public class DanhMucTimKiemAdapter extends BaseAdapter
 {
-    private Context context;
-    private int layout;
-    private ArrayList<DanhMuc> arr_DanhMuc;
+    private final Context context;
+    private final int layout;
+    private final ArrayList<DanhMuc> arr_DanhMuc;
 
     public DanhMucTimKiemAdapter(Context context, int layout, ArrayList<DanhMuc> arr_DanhMuc)
     {
@@ -43,7 +43,7 @@ public class DanhMucTimKiemAdapter extends BaseAdapter
         return 0;
     }
 
-    private class ViewHolder
+    private static class ViewHolder
     {
         TextView txtView_Ten;
     }
@@ -54,7 +54,7 @@ public class DanhMucTimKiemAdapter extends BaseAdapter
         DanhMucTimKiemAdapter.ViewHolder holder;
         if (view == null)
         {
-            holder = new DanhMucTimKiemAdapter.ViewHolder();
+            holder = new ViewHolder();
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(layout, null);
             holder.txtView_Ten = view.findViewById(R.id.txtView_Ten);

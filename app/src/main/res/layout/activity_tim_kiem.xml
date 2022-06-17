@@ -10,14 +10,15 @@
     <include
         layout="@layout/top_timkiem"/>
 
-    <GridView
-        android:id="@+id/gridView_SanPham_TimKiem"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:numColumns="2"
-        android:verticalSpacing="8dp"
-        android:horizontalSpacing="8dp"
-        android:stretchMode="columnWidth"
-        android:gravity="center"
-        android:padding="8dp"/>
+        android:layout_height="530dp"
+        android:padding="8dp">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView_SanPham_TimKiem"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true" />
+    </RelativeLayout>
 </LinearLayout>

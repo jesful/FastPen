@@ -21,15 +21,10 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 
 import hcmute.edu.vn.fastpen.Adapter.BinhLuanChiTietSanPhamAdapter;
-import hcmute.edu.vn.fastpen.Adapter.SanPhamChiTietSanPhamAdapter;
 import hcmute.edu.vn.fastpen.Model.BinhLuan;
-import hcmute.edu.vn.fastpen.Model.DanhMuc;
-import hcmute.edu.vn.fastpen.Model.SanPham;
-import hcmute.edu.vn.fastpen.Model.ThuongHieu;
 import hcmute.edu.vn.fastpen.R;
 
 public class TatCaBinhLuanActivity extends AppCompatActivity
@@ -61,12 +56,8 @@ public class TatCaBinhLuanActivity extends AppCompatActivity
     // Array list for recycler view data source
     private ArrayList<BinhLuan> arr_BinhLuan;
     private ArrayList<Integer> arr_LocBinhLuan;
-    // Layout Manager
-    private RecyclerView.LayoutManager recyclerViewLayoutManager;
     // Adapter class object
     private BinhLuanChiTietSanPhamAdapter binhLuanChiTietSanPhamAdapter;
-    // Linear Layout Manager
-    private LinearLayoutManager linearLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -74,7 +65,7 @@ public class TatCaBinhLuanActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tat_ca_binh_luan);
 
-        //
+        // Nút khi click vào sẽ kết thúc Activity hiện tại và quay về Activity chi tiết sản phẩm
         ImageView imgView_QuayVe_TatCaBinhLuan = findViewById(R.id.imgView_QuayVe_TatCaBinhLuan);
         imgView_QuayVe_TatCaBinhLuan.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,14 +93,16 @@ public class TatCaBinhLuanActivity extends AppCompatActivity
         // Lấy dữ liệu bình luận và đổ lên recycler view
         // initialisation with id's
         recyclerView_BinhLuan_TatCaBinhLuan = findViewById(R.id.recyclerView_BinhLuan_TatCaBinhLuan);
-        recyclerViewLayoutManager = new LinearLayoutManager(getApplicationContext());
+        // Layout Manager
+        RecyclerView.LayoutManager recyclerViewLayoutManager = new LinearLayoutManager(getApplicationContext());
 
         // Set LayoutManager on Recycler View
         recyclerView_BinhLuan_TatCaBinhLuan.setLayoutManager(recyclerViewLayoutManager);
 
         // Set Horizontal Layout Manager
         // for Recycler view
-        linearLayoutManager = new LinearLayoutManager(TatCaBinhLuanActivity.this, LinearLayoutManager.VERTICAL, false);
+        // Linear Layout Manager
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(TatCaBinhLuanActivity.this, LinearLayoutManager.VERTICAL, false);
         recyclerView_BinhLuan_TatCaBinhLuan.setLayoutManager(linearLayoutManager);
         arr_BinhLuan = new ArrayList<>();
         GetDataBinhLuan();

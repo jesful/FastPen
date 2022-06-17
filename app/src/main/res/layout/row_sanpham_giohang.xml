@@ -6,10 +6,23 @@
     android:background="@drawable/border_cell_sanphamtronggio"
     android:layout_margin="8dp">
 
-    <ImageView
-        android:id="@+id/imgView_HinhAnhSanPham_GioHang"
-        android:layout_width="100dp"
-        android:layout_height="100dp" />
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/imgView_HinhAnhSanPham_GioHang"
+            android:layout_width="100dp"
+            android:layout_height="100dp" />
+
+        <ProgressBar
+            android:id="@+id/progressBar_HinhAnhSanPham_GioHang"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone" />
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

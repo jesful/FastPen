@@ -6,50 +6,36 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-import hcmute.edu.vn.fastpen.Adapter.BinhLuanChiTietSanPhamAdapter;
-import hcmute.edu.vn.fastpen.Adapter.SanPhamChiTietSanPhamAdapter;
 import hcmute.edu.vn.fastpen.Adapter.SanPhamGioHangAdapter;
 import hcmute.edu.vn.fastpen.Global;
-import hcmute.edu.vn.fastpen.Model.BinhLuan;
 import hcmute.edu.vn.fastpen.Model.GioHang;
-import hcmute.edu.vn.fastpen.Model.SanPham;
 import hcmute.edu.vn.fastpen.R;
 
 public class GioHangActivity extends AppCompatActivity
 {
-    private ImageView imgView_QuayVe_GioHang;
     private TextView txtView_GiaTongCong_GioHang;
-    private LinearLayout linearLayout_MuaHang_GioHang;
     // Database Reference
     private DatabaseReference dbref;
     // Recycler View object
     private RecyclerView recyclerView_SanPhamTrongGio_GioHang;
     // Array list for recycler view data source
     private ArrayList<GioHang> arr_GioHang;
-    // Layout Manager
-    private RecyclerView.LayoutManager recyclerViewLayoutManager;
     // Adapter class object
     private SanPhamGioHangAdapter sanPhamGioHangAdapter;
-    // Linear Layout Manager
-    private LinearLayoutManager linearLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -57,7 +43,7 @@ public class GioHangActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gio_hang);
 
-        imgView_QuayVe_GioHang = findViewById(R.id.imgView_QuayVe_GioHang);
+        ImageView imgView_QuayVe_GioHang = findViewById(R.id.imgView_QuayVe_GioHang);
         imgView_QuayVe_GioHang.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -68,7 +54,7 @@ public class GioHangActivity extends AppCompatActivity
         arr_GioHang = new ArrayList<>();
         GetDataSanPhamGioHang();
 
-        linearLayout_MuaHang_GioHang = findViewById(R.id.linearLayout_MuaHang_GioHang);
+        LinearLayout linearLayout_MuaHang_GioHang = findViewById(R.id.linearLayout_MuaHang_GioHang);
         linearLayout_MuaHang_GioHang.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -91,9 +77,11 @@ public class GioHangActivity extends AppCompatActivity
             dbref = FirebaseDatabase.getInstance().getReference("SanPham/" + id + "/gia");
             // Lấy dữ liệu của sản phẩm có idSanPham bằng id được lưu trữ để lấy thông tin của sản phẩm
             int finalI = i;
-            dbref.addListenerForSingleValueEvent(new ValueEventListener() {
+            dbref.addListenerForSingleValueEvent(new ValueEventListener()
+            {
                 @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                public void onDataChange(@NonNull DataSnapshot snapshot)
+                {
                     int gia = snapshot.getValue(Integer.class);
 
                     giatong[0] = giatong[0] + gia * arr_GioHang.get(finalI).getSoLuong();
@@ -113,14 +101,16 @@ public class GioHangActivity extends AppCompatActivity
         // Lấy dữ liệu sản phẩm trong giỏ và đổ lên recycler view
         // initialisation with id's
         recyclerView_SanPhamTrongGio_GioHang = findViewById(R.id.recyclerView_SanPhamTrongGio_GioHang);
-        recyclerViewLayoutManager = new LinearLayoutManager(getApplicationContext());
+        // Layout Manager
+        RecyclerView.LayoutManager recyclerViewLayoutManager = new LinearLayoutManager(getApplicationContext());
 
         // Set LayoutManager on Recycler View
         recyclerView_SanPhamTrongGio_GioHang.setLayoutManager(recyclerViewLayoutManager);
 
         // Set Horizontal Layout Manager
         // for Recycler view
-        linearLayoutManager = new LinearLayoutManager(GioHangActivity.this, LinearLayoutManager.VERTICAL, false);
+        // Linear Layout Manager
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(GioHangActivity.this, LinearLayoutManager.VERTICAL, false);
         recyclerView_SanPhamTrongGio_GioHang.setLayoutManager(linearLayoutManager);
 
         // Lấy dữ liệu trên firebase và thêm vào array list

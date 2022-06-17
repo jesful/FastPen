@@ -1,22 +1,33 @@
 package hcmute.edu.vn.fastpen.Adapter;
 
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import hcmute.edu.vn.fastpen.Global;
@@ -29,16 +40,21 @@ import hcmute.edu.vn.fastpen.R;
 public class SanPhamGioHangAdapter extends RecyclerView.Adapter<SanPhamGioHangAdapter.MyView>
 {
     // List with String type
-    private ArrayList<GioHang> arr_GioHang;
+    private final ArrayList<GioHang> arr_GioHang;
     // Database Reference
     private DatabaseReference dbref;
 
     // View Holder class which
     // extends RecyclerView.ViewHolder
-    public class MyView extends RecyclerView.ViewHolder
+    public static class MyView extends RecyclerView.ViewHolder
     {
-        private ImageView imgView_HinhAnhSanPham_GioHang, imgView_GiamSoLuongSanPham_GioHang, imgView_TangSoLuongSanPham_GioHang;
-        private TextView txtView_TenSanPham_GioHang, txtView_GiaTien_GioHang, txtView_SoLuongSanPham_GioHang;
+        private final ImageView imgView_HinhAnhSanPham_GioHang;
+        private final ImageView imgView_GiamSoLuongSanPham_GioHang;
+        private final ImageView imgView_TangSoLuongSanPham_GioHang;
+        private final TextView txtView_TenSanPham_GioHang;
+        private final TextView txtView_GiaTien_GioHang;
+        private final TextView txtView_SoLuongSanPham_GioHang;
+        private final ProgressBar progressBar_HinhAnhSanPham_GioHang;
 
         // parameterised constructor for View Holder class
         // which takes the view as a parameter
@@ -53,6 +69,7 @@ public class SanPhamGioHangAdapter extends RecyclerView.Adapter<SanPhamGioHangAd
             txtView_TenSanPham_GioHang = view.findViewById(R.id.txtView_TenSanPham_GioHang);
             txtView_GiaTien_GioHang = view.findViewById(R.id.txtView_GiaTien_GioHang);
             txtView_SoLuongSanPham_GioHang = view.findViewById(R.id.txtView_SoLuongSanPham_GioHang);
+            progressBar_HinhAnhSanPham_GioHang = view.findViewById(R.id.progressBar_HinhAnhSanPham_GioHang);
         }
     }
 
@@ -94,7 +111,7 @@ public class SanPhamGioHangAdapter extends RecyclerView.Adapter<SanPhamGioHangAd
 
                 if (sp != null)
                 {
-                    //holder.imgView_HinhAnhSanPham_GioHang;
+                    GetImage(holder.imgView_HinhAnhSanPham_GioHang,sp.getHinhAnh(),holder.progressBar_HinhAnhSanPham_GioHang);
                     holder.txtView_TenSanPham_GioHang.setText(sp.getTenSanPham());
                     holder.txtView_GiaTien_GioHang.setText(String.valueOf(sp.getGia()));
                 }
@@ -139,5 +156,43 @@ public class SanPhamGioHangAdapter extends RecyclerView.Adapter<SanPhamGioHangAd
     public int getItemCount()
     {
         return arr_GioHang.size();
+    }
+
+    public void GetImage(ImageView imageView, String ten, ProgressBar progressBar)
+    {
+        StorageReference storageReference = FirebaseStorage.getInstance().getReference("Image/" + ten);
+        try {
+            File localFile = File.createTempFile("tempfile", ".jpg");
+            storageReference.getFile(localFile)
+                    .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>()
+                    {
+                        @Override
+                        public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot)
+                        {
+                            progressBar.setVisibility(View.GONE);
+                            Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
+                            imageView.setImageBitmap(bitmap);
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener()
+                    {
+                        @Override
+                        public void onFailure(@NonNull Exception e)
+                        {
+
+                        }
+                    })
+                    .addOnProgressListener(new OnProgressListener<FileDownloadTask.TaskSnapshot>()
+                    {
+                        @Override
+                        public void onProgress(@NonNull FileDownloadTask.TaskSnapshot snapshot) {
+                            progressBar.setVisibility(View.VISIBLE);
+                            imageView.setImageResource(R.drawable.plain_white_background_211387);
+                        }
+                    });
+        }
+        catch (IOException e){
+            e.printStackTrace();
+        }
     }
 }

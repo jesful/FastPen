@@ -1,16 +1,18 @@
 package hcmute.edu.vn.fastpen.Adapter;
 
-import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -23,78 +25,98 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import hcmute.edu.vn.fastpen.Activity.ChiTietSanPhamActivity;
 import hcmute.edu.vn.fastpen.Model.SanPham;
 import hcmute.edu.vn.fastpen.R;
 
-public class SanPhamTrangChuAdapter extends BaseAdapter
+// The adapter class which
+// extends RecyclerView Adapter
+public class SanPhamTrangChuAdapter extends RecyclerView.Adapter<SanPhamTrangChuAdapter.ViewHolder>
 {
-    private final Context context;
-    private final int layout;
-    private ArrayList<SanPham> arr_SanPham;
+    // List with String type
+    private final ArrayList<SanPham> arr_SanPham;
+    private OnItemClickListener mOnItemClickListener;
 
-    public SanPhamTrangChuAdapter(Context context, int layout, ArrayList<SanPham> arr_SanPham)
+    public interface OnItemClickListener {
+        public void onItemClick(View view, int position);
+    }
+
+    // View Holder class which
+    // extends RecyclerView.ViewHolder
+    public static class ViewHolder extends RecyclerView.ViewHolder
     {
-        this.context = context;
-        this.layout = layout;
+        private final ImageView imgView_HinhAnhSanPham;
+        private final TextView txtView_TenSanPham;
+        private final TextView txtView_SLDaBan;
+        private final TextView txtView_GiaTien;
+        private final ProgressBar progressBar_HinhAnhSanPham;
+        private final View container;
+
+        // parameterised constructor for View Holder class
+        // which takes the view as a parameter
+        public ViewHolder(View view)
+        {
+            super(view);
+
+            // initialise TextView with id
+            imgView_HinhAnhSanPham = view.findViewById(R.id.imgView_HinhAnhSanPham);
+            txtView_TenSanPham = view.findViewById(R.id.txtView_TenSanPham);
+            txtView_SLDaBan = view.findViewById(R.id.txtView_SLDaBan);
+            txtView_GiaTien = view.findViewById(R.id.txtView_GiaTien);
+            progressBar_HinhAnhSanPham = view.findViewById(R.id.progressBar_HinhAnhSanPham);
+            container = view;
+        }
+    }
+
+    // Constructor for adapter class
+    // which takes a list of String type
+    public SanPhamTrangChuAdapter(ArrayList<SanPham> arr_SanPham, OnItemClickListener onItemClickListener)
+    {
         this.arr_SanPham = arr_SanPham;
+        mOnItemClickListener = onItemClickListener;
+    }
+
+    // Override onCreateViewHolder which deals
+    // with the inflation of the card layout
+    // as an item for the RecyclerView.
+    @NonNull
+    @Override
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
+    {
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.cell_sanpham, parent, false);
+
+        final ViewHolder viewHolder = new ViewHolder(itemView);
+        viewHolder.container.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v) {
+                mOnItemClickListener.onItemClick(v, viewHolder.getAdapterPosition());
+            }
+        });
+
+        // return itemView
+        return viewHolder;
     }
 
     @Override
-    public int getCount()
+    public void onBindViewHolder(@NonNull final ViewHolder holder, int i)
+    {
+        // Set the text of each item of
+        // Recycler view with the list items
+        final SanPham sp = arr_SanPham.get(i);
+        GetImage(holder.imgView_HinhAnhSanPham, sp.getHinhAnh(), holder.progressBar_HinhAnhSanPham);
+        holder.txtView_TenSanPham.setText(sp.getTenSanPham());
+        holder.txtView_SLDaBan.setText(String.valueOf(sp.getSoLuongDaBan()));
+        holder.txtView_GiaTien.setText(String.valueOf(sp.getGia()));
+    }
+
+    @Override
+    public int getItemCount()
     {
         return arr_SanPham.size();
     }
 
-    @Override
-    public Object getItem(int position)
-    {
-        return null;
-    }
-
-    @Override
-    public long getItemId(int position)
-    {
-        return 0;
-    }
-
-    private class ViewHolder
-    {
-        ImageView imgView_HinhAnhSanPham;
-        TextView txtView_TenSanPham;
-        TextView txtView_SLDaBan;
-        TextView txtView_GiaTien;
-    }
-
-    @Override
-    public View getView(int i, View view, ViewGroup viewGroup)
-    {
-        SanPhamTrangChuAdapter.ViewHolder holder;
-        if (view == null)
-        {
-            holder = new SanPhamTrangChuAdapter.ViewHolder();
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = inflater.inflate(layout, null);
-            holder.imgView_HinhAnhSanPham = view.findViewById(R.id.imgView_HinhAnhSanPham);
-            holder.txtView_TenSanPham = view.findViewById(R.id.txtView_TenSanPham);
-            holder.txtView_SLDaBan = view.findViewById(R.id.txtView_SLDaBan);
-            holder.txtView_GiaTien = view.findViewById(R.id.txtView_GiaTien);
-            view.setTag(holder);
-        }
-        else
-        {
-            holder = (SanPhamTrangChuAdapter.ViewHolder) view.getTag();
-        }
-
-        final SanPham sp = arr_SanPham.get(i);
-        GetImage(holder.imgView_HinhAnhSanPham, sp.getHinhAnh());
-        holder.txtView_TenSanPham.setText(sp.getTenSanPham());
-        holder.txtView_SLDaBan.setText(String.valueOf(sp.getSoLuongDaBan()));
-        holder.txtView_GiaTien.setText(String.valueOf(sp.getGia()));
-
-        return view;
-    }
-
-    public void GetImage(ImageView imageView, String ten)
+    public void GetImage(ImageView imageView, String ten, ProgressBar progressBar)
     {
         StorageReference storageReference = FirebaseStorage.getInstance().getReference("Image/" + ten);
         try {
@@ -103,7 +125,9 @@ public class SanPhamTrangChuAdapter extends BaseAdapter
                     .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>()
                     {
                         @Override
-                        public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                        public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot)
+                        {
+                            progressBar.setVisibility(View.GONE);
                             Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
                             imageView.setImageBitmap(bitmap);
                         }
@@ -120,7 +144,8 @@ public class SanPhamTrangChuAdapter extends BaseAdapter
                     {
                         @Override
                         public void onProgress(@NonNull FileDownloadTask.TaskSnapshot snapshot) {
-                            imageView.setImageResource(R.drawable.loading);
+                            progressBar.setVisibility(View.VISIBLE);
+                            imageView.setImageResource(R.drawable.plain_white_background_211387);
                         }
                     });
         }

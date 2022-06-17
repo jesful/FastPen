@@ -7,19 +7,17 @@
     android:orientation="vertical"
     tools:context=".Fragment.TrangChuFragment">
 
-    <include
-        layout="@layout/top_trangchu"/>
+    <include layout="@layout/top_trangchu"/>
 
-
-
-    <GridView
-        android:id="@+id/gridView_SanPham_TrangChu"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="530dp"
-        android:numColumns="2"
-        android:verticalSpacing="8dp"
-        android:horizontalSpacing="8dp"
-        android:stretchMode="columnWidth"
-        android:gravity="center"
-        android:padding="8dp"/>
+        android:padding="8dp">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView_SanPham_TrangChu"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true" />
+    </RelativeLayout>
 </LinearLayout>
