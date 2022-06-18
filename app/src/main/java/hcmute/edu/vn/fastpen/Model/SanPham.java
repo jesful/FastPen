@@ -7,26 +7,26 @@ public class SanPham
     private int IdDanhMuc;
     private int IdThuongHieu;
     private int Gia;
+    private int SoLuongDaBan;
     private int SoLuong;
     private String MoTa;
     private String HinhAnh;
-    private int SoLuongDaBan;
 
     public SanPham()
     {
     }
 
-    public SanPham(int idSanPham, String tenSanPham, int idDanhMuc, int idThuongHieu, int gia, int soLuong, String moTa, String hinhAnh, int soLuongDaBan)
+    public SanPham(int idSanPham, String tenSanPham, int idDanhMuc, int idThuongHieu, int gia, int soLuongDaBan, int soLuong, String moTa, String hinhAnh)
     {
         IdSanPham = idSanPham;
         TenSanPham = tenSanPham;
         IdDanhMuc = idDanhMuc;
         IdThuongHieu = idThuongHieu;
         Gia = gia;
+        SoLuongDaBan = soLuongDaBan;
         SoLuong = soLuong;
         MoTa = moTa;
         HinhAnh = hinhAnh;
-        SoLuongDaBan = soLuongDaBan;
     }
 
     public int getIdSanPham()
@@ -78,6 +78,16 @@ public class SanPham
         Gia = gia;
     }
 
+    public int getSoLuongDaBan()
+    {
+        return SoLuongDaBan;
+    }
+
+    public void setSoLuongDaBan(int soLuongDaBan)
+    {
+        SoLuongDaBan = soLuongDaBan;
+    }
+
     public int getSoLuong()
     {
         return SoLuong;
@@ -106,15 +116,5 @@ public class SanPham
     public void setHinhAnh(String hinhAnh)
     {
         HinhAnh = hinhAnh;
-    }
-
-    public int getSoLuongDaBan()
-    {
-        return SoLuongDaBan;
-    }
-
-    public void setSoLuongDaBan(int soLuongDaBan)
-    {
-        SoLuongDaBan = soLuongDaBan;
     }
 }

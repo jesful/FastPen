@@ -82,7 +82,7 @@ public class HoaDon
         TrangThai = trangThai;
     }
 
-    public boolean isTienMat() {
+    public boolean getTienMat() {
         return TienMat;
     }
 

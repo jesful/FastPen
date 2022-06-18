@@ -32,15 +32,13 @@ import hcmute.edu.vn.fastpen.Model.GioHang;
 import hcmute.edu.vn.fastpen.Model.SanPham;
 import hcmute.edu.vn.fastpen.R;
 
-// The adapter class which
-// extends RecyclerView Adapter
+// Adapter class extends RecyclerView Adapter
 public class SanPhamThanhToanAdapter extends RecyclerView.Adapter<SanPhamThanhToanAdapter.MyView>
 {
-    // List with String type
+    // Array list GioHang
     private final ArrayList<GioHang> arr_GioHang;
 
-    // View Holder class which
-    // extends RecyclerView.ViewHolder
+    // View Holder class extends RecyclerView.ViewHolder
     public static class MyView extends RecyclerView.ViewHolder
     {
         private final ImageView imgView_HinhAnhSanPham_ThanhToan;
@@ -49,13 +47,11 @@ public class SanPhamThanhToanAdapter extends RecyclerView.Adapter<SanPhamThanhTo
         private final TextView txtView_GiaTien_ThanhToan;
         private final ProgressBar progressBar_HinhAnhSanPham_ThanhToan;
 
-        // parameterised constructor for View Holder class
-        // which takes the view as a parameter
         public MyView(View view)
         {
             super(view);
 
-            // initialise TextView with id
+            // Khởi tạo các component trong item của recycler view
             imgView_HinhAnhSanPham_ThanhToan = view.findViewById(R.id.imgView_HinhAnhSanPham_ThanhToan);
             txtView_TenSanPham_ThanhToan = view.findViewById(R.id.txtView_TenSanPham_ThanhToan);
             txtView_SoLuongSanPham_ThanhToan = view.findViewById(R.id.txtView_SoLuongSanPham_ThanhToan);
@@ -64,16 +60,12 @@ public class SanPhamThanhToanAdapter extends RecyclerView.Adapter<SanPhamThanhTo
         }
     }
 
-    // Constructor for adapter class
-    // which takes a list of String type
+    // Constructor cho adapter tham số là array GioHang
     public SanPhamThanhToanAdapter(ArrayList<GioHang> arr_GioHang)
     {
         this.arr_GioHang = arr_GioHang;
     }
 
-    // Override onCreateViewHolder which deals
-    // with the inflation of the card layout
-    // as an item for the RecyclerView.
     @NonNull
     @Override
     public MyView onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
@@ -87,22 +79,22 @@ public class SanPhamThanhToanAdapter extends RecyclerView.Adapter<SanPhamThanhTo
     @Override
     public void onBindViewHolder(@NonNull final MyView holder, int position)
     {
-        // Set the text of each item of
-        // Recycler view with the list items
         holder.txtView_SoLuongSanPham_ThanhToan.setText(String.valueOf(arr_GioHang.get(position).getSoLuong()));
 
         int id = arr_GioHang.get(position).getIdSanPham();
-        // Database Reference
+        // Lấy dữ liệu trên firebase theo đường dẫn SanPham/id sản phẩm
         DatabaseReference dbref = FirebaseDatabase.getInstance().getReference("SanPham/" + id);
         // Lấy dữ liệu của sản phẩm có idSanPham bằng id được lưu trữ để lấy thông tin của sản phẩm
         dbref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot)
             {
+                // Lấy dữ liệu sản phẩm
                 SanPham sp = snapshot.getValue(SanPham.class);
 
                 if (sp != null)
                 {
+                    // Sau khi đã lấy hết dữ liệu sản phẩm thì set hình ảnh sản phẩm, tên sản phẩm, giá tiền
                     GetImage(holder.imgView_HinhAnhSanPham_ThanhToan,sp.getHinhAnh(),holder.progressBar_HinhAnhSanPham_ThanhToan);
                     holder.txtView_TenSanPham_ThanhToan.setText(sp.getTenSanPham());
                     holder.txtView_GiaTien_ThanhToan.setText(String.valueOf(sp.getGia()));
@@ -122,6 +114,7 @@ public class SanPhamThanhToanAdapter extends RecyclerView.Adapter<SanPhamThanhTo
         return arr_GioHang.size();
     }
 
+    // Hàm set hình ảnh sản phẩm
     public void GetImage(ImageView imageView, String ten, ProgressBar progressBar)
     {
         StorageReference storageReference = FirebaseStorage.getInstance().getReference("Image/" + ten);
@@ -133,6 +126,7 @@ public class SanPhamThanhToanAdapter extends RecyclerView.Adapter<SanPhamThanhTo
                         @Override
                         public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot)
                         {
+                            // Lấy thành công thì set hình ảnh lên và không hiển thị progress bar
                             progressBar.setVisibility(View.GONE);
                             Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
                             imageView.setImageBitmap(bitmap);
@@ -150,6 +144,7 @@ public class SanPhamThanhToanAdapter extends RecyclerView.Adapter<SanPhamThanhTo
                     {
                         @Override
                         public void onProgress(@NonNull FileDownloadTask.TaskSnapshot snapshot) {
+                            // Trong khi đợi load hình thì hiển thị progress bar
                             progressBar.setVisibility(View.VISIBLE);
                             imageView.setImageResource(R.drawable.plain_white_background_211387);
                         }

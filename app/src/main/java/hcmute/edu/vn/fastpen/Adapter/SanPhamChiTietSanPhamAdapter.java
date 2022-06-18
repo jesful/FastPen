@@ -28,24 +28,30 @@ import hcmute.edu.vn.fastpen.R;
 
 // The adapter class which
 // extends RecyclerView Adapter
-public class SanPhamChiTietSanPhamAdapter extends RecyclerView.Adapter<SanPhamChiTietSanPhamAdapter.MyView>
+public class SanPhamChiTietSanPhamAdapter extends RecyclerView.Adapter<SanPhamChiTietSanPhamAdapter.ViewHolder>
 {
     // List with String type
     private final ArrayList<SanPham> arr_SanPham;
+    private final SanPhamChiTietSanPhamAdapter.OnItemClickListener mOnItemClickListener;
+
+    public interface OnItemClickListener {
+        void onItemClick(View view, int position);
+    }
 
     // View Holder class which
     // extends RecyclerView.ViewHolder
-    public static class MyView extends RecyclerView.ViewHolder
+    public static class ViewHolder extends RecyclerView.ViewHolder
     {
         private final ImageView imgView_HinhAnhSanPham;
         private final TextView txtView_TenSanPham;
         private final TextView txtView_SLDaBan;
         private final TextView txtView_GiaTien;
         private final ProgressBar progressBar_HinhAnhSanPham;
+        private final View container;
 
         // parameterised constructor for View Holder class
         // which takes the view as a parameter
-        public MyView(View view)
+        public ViewHolder(View view)
         {
             super(view);
 
@@ -55,14 +61,16 @@ public class SanPhamChiTietSanPhamAdapter extends RecyclerView.Adapter<SanPhamCh
             txtView_SLDaBan = view.findViewById(R.id.txtView_SLDaBan);
             txtView_GiaTien = view.findViewById(R.id.txtView_GiaTien);
             progressBar_HinhAnhSanPham = view.findViewById(R.id.progressBar_HinhAnhSanPham);
+            container = view;
         }
     }
 
     // Constructor for adapter class
     // which takes a list of String type
-    public SanPhamChiTietSanPhamAdapter(ArrayList<SanPham> arr_SanPham)
+    public SanPhamChiTietSanPhamAdapter(ArrayList<SanPham> arr_SanPham, OnItemClickListener onItemClickListener)
     {
         this.arr_SanPham = arr_SanPham;
+        mOnItemClickListener = onItemClickListener;
     }
 
     // Override onCreateViewHolder which deals
@@ -70,16 +78,25 @@ public class SanPhamChiTietSanPhamAdapter extends RecyclerView.Adapter<SanPhamCh
     // as an item for the RecyclerView.
     @NonNull
     @Override
-    public MyView onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
     {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.cell_sanpham_chitietsanpham, parent, false);
 
+        final ViewHolder viewHolder = new ViewHolder(itemView);
+        viewHolder.container.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v) {
+                mOnItemClickListener.onItemClick(v, viewHolder.getAdapterPosition());
+            }
+        });
+
         // return itemView
-        return new MyView(itemView);
+        return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final MyView holder, int i)
+    public void onBindViewHolder(@NonNull final ViewHolder holder, int i)
     {
         // Set the text of each item of
         // Recycler view with the list items

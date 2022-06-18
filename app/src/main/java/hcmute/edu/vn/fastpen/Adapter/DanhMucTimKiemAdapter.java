@@ -14,8 +14,11 @@ import hcmute.edu.vn.fastpen.R;
 
 public class DanhMucTimKiemAdapter extends BaseAdapter
 {
+    // Context
     private final Context context;
+    // Id layout
     private final int layout;
+    // Array list
     private final ArrayList<DanhMuc> arr_DanhMuc;
 
     public DanhMucTimKiemAdapter(Context context, int layout, ArrayList<DanhMuc> arr_DanhMuc)
@@ -26,6 +29,7 @@ public class DanhMucTimKiemAdapter extends BaseAdapter
     }
 
     @Override
+    // Trả về kích thước array
     public int getCount()
     {
         return arr_DanhMuc.size();
@@ -38,6 +42,7 @@ public class DanhMucTimKiemAdapter extends BaseAdapter
     }
 
     @Override
+    // Trả về vị trí của item
     public long getItemId(int position)
     {
         return 0;
@@ -54,6 +59,7 @@ public class DanhMucTimKiemAdapter extends BaseAdapter
         DanhMucTimKiemAdapter.ViewHolder holder;
         if (view == null)
         {
+            // Khởi tạo viewholder, component trong holder
             holder = new ViewHolder();
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(layout, null);
@@ -65,6 +71,7 @@ public class DanhMucTimKiemAdapter extends BaseAdapter
             holder = (DanhMucTimKiemAdapter.ViewHolder) view.getTag();
         }
 
+        // Set dữ liệu tên lên layout item grid view
         final DanhMuc dm = arr_DanhMuc.get(i);
         holder.txtView_Ten.setText(String.valueOf(dm.getTenDanhMuc()));
 

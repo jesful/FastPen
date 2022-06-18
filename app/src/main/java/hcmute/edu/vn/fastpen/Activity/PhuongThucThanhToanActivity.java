@@ -16,28 +16,35 @@ import hcmute.edu.vn.fastpen.R;
 
 public class PhuongThucThanhToanActivity extends AppCompatActivity
 {
+    // Radio button
     private RadioButton radioBtn_1_PhuongThucThanhToan, radioBtn_2_PhuongThucThanhToan, radioBtn_3_PhuongThucThanhToan, radioBtn_4_PhuongThucThanhToan, radioBtn_5_PhuongThucThanhToan, radioBtn_6_PhuongThucThanhToan, radioBtn_7_PhuongThucThanhToan;
-
+    // Shared Preferences
     SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        // Set view hiển thị của activity
         setContentView(R.layout.activity_phuong_thuc_thanh_toan);
 
+        // Click vào icon mũi tên để quay về trang trước đó bằng cách finish activity hiện tại
         ImageView imgView_QuayVe_PhuongThucThanhToan = findViewById(R.id.imgView_QuayVe_PhuongThucThanhToan);
         imgView_QuayVe_PhuongThucThanhToan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // Nếu quay về trang thanh toán bằng cách này thì sẽ không truyền dữ liệu phương thức thanh toán về bằng intent
                 setResult(Activity.RESULT_CANCELED);
                 finish();
             }
         });
 
+        // Khởi tạo các textview tổng tiền sản phẩm, phí vận chuyển, thành tiền
         TextView txtView_TienHang_PhuongThucThanhToan = findViewById(R.id.txtView_TienHang_PhuongThucThanhToan);
         TextView txtView_PhiVanChuyen_PhuongThucThanhToan = findViewById(R.id.txtView_PhiVanChuyen_PhuongThucThanhToan);
         TextView txtView_ThanhTien_PhuongThucThanhToan = findViewById(R.id.txtView_ThanhTien_PhuongThucThanhToan);
+        // Khởi tạo các radio button và linearlayout của các radio button tương ứng
+        // Cài đặt chức năng click vào từng linear layout sẽ thay đổi phương thức thanh toán tương ứng
         radioBtn_1_PhuongThucThanhToan = findViewById(R.id.radioBtn_1_PhuongThucThanhToan);
         radioBtn_2_PhuongThucThanhToan = findViewById(R.id.radioBtn_2_PhuongThucThanhToan);
         radioBtn_3_PhuongThucThanhToan = findViewById(R.id.radioBtn_3_PhuongThucThanhToan);
@@ -228,11 +235,14 @@ public class PhuongThucThanhToanActivity extends AppCompatActivity
             }
         });
 
+        // Khởi tạo shared preferences có tên dataGiaoHang, chế độ MODE_PRIVATE
         sharedPreferences = getSharedPreferences("dataGiaoHang", MODE_PRIVATE);
+        // Set dữ liệu các text view bằng dữ liệu được chia sẻ từ shared preferences
         txtView_TienHang_PhuongThucThanhToan.setText(sharedPreferences.getString("th", ""));
         txtView_PhiVanChuyen_PhuongThucThanhToan.setText(sharedPreferences.getString("pvch", ""));
         txtView_ThanhTien_PhuongThucThanhToan.setText(sharedPreferences.getString("tc", ""));
 
+        // Set check cho radio button tương ứng với dữ liệu được chia sẻ từ shared preferences
         String pttt = sharedPreferences.getString("pttt", "");
         switch (pttt)
         {
@@ -259,6 +269,7 @@ public class PhuongThucThanhToanActivity extends AppCompatActivity
                 break;
         }
 
+        // Linear layout khi click vào sẽ xác nhận chọn phương thức thanh toán đang được check
         LinearLayout linearLayout_Chon_PhuongThucThanhToan = findViewById(R.id.linearLayout_Chon_PhuongThucThanhToan);
         linearLayout_Chon_PhuongThucThanhToan.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -285,12 +296,13 @@ public class PhuongThucThanhToanActivity extends AppCompatActivity
                                     else
                                         pttt = "Thẻ ATM, Visa, Master, JCB";
 
+                // Dùng intent putExtra để truyền dữ liệu phương thức thanh toán về activity thanh toán
                 Intent data = new Intent();
                 // Truyền data vào intent
                 data.putExtra("pttt", pttt);
                 // Đặt resultCode là Activity.RESULT_OK để thể hiện đã thành công và có chứa kết quả trả về
                 setResult(Activity.RESULT_OK, data);
-                // gọi hàm finish() để đóng Activity hiện tại và trở về MainActivity.
+                // gọi hàm finish() để đóng Activity hiện tại và trở về activity thanh toán
                 finish();
             }
         });

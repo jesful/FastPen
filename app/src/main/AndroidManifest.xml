@@ -3,6 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="hcmute.edu.vn.fastpen">
 
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -13,6 +17,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FastPen"
         tools:targetApi="31">
+        <activity
+            android:name=".Activity.DangNhapActivity"
+            android:exported="false" />
         <activity
             android:name=".Activity.PhuongThucThanhToanActivity"
             android:exported="false" />
@@ -33,6 +40,57 @@
             android:exported="false" />
         <activity
             android:name=".Activity.TimKiemActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.QuanLySanPham"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.ThemThuongHieu"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.ThemDanhMuc"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.ThemSanPham"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.QuanLyThuongHieu"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.QuanLyTaiKhoan"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.QuanLyDonHang"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.QuanLyDanhMuc"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.ChiTietThuongHieu"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.ChiTietTaiKhoan"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.ChiTietDonHang"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.ChiTietDanhMuc"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.AdminHome"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.ChiTietHoaDonActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.ThongTinCaNhanActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.DoiMatKhauActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.DangKyActivity"
             android:exported="false" />
         <activity
             android:name=".Activity.MainActivity"

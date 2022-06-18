@@ -29,7 +29,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import hcmute.edu.vn.fastpen.Adapter.SanPhamThanhToanAdapter;
-import hcmute.edu.vn.fastpen.Global;
+import hcmute.edu.vn.fastpen.Model.Global;
 import hcmute.edu.vn.fastpen.Model.ChiTietHoaDon;
 import hcmute.edu.vn.fastpen.Model.GioHang;
 import hcmute.edu.vn.fastpen.Model.HoaDon;
@@ -38,25 +38,30 @@ import hcmute.edu.vn.fastpen.R;
 
 public class ThanhToanActivity extends AppCompatActivity
 {
+    // Image View
     private ImageView imgView_HinhAnhThanhToan_ThanhToan;
+    // Text View
     private TextView txtView_Ten_ThanhToan, txtView_SDT_ThanhToan, txtView_Email_ThanhToan, txtView_DiaChi_ThanhToan, txtView_PhuongThucThanhToan_ThanhToan, txtView_TienHang_ThanhToan, txtView_PhiVanChuyen_ThanhToan, txtView_GiaTongCong_ThanhToan;
+    // Edit Text
     private EditText editTxt_GhiChu_ThanhToan;
     // Database Reference
     private DatabaseReference dbref;
-    // Recycler View object
+    // Recycler View
     private RecyclerView recyclerView_SanPhamTrongGio_ThanhToan;
-    // Array list for recycler view data source
+    // Array List để lưu trữ dữ liệu dùng để adapt lên recycler view
     private ArrayList<GioHang> arr_GioHang;
-    // Adapter class object
+    // Adapter để adapt dữ liệu từ array lên recycler view
     private SanPhamThanhToanAdapter sanPhamThanhToanAdapter;
-
+    // Shared Preferences
     SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Set view hiển thị của activity
         setContentView(R.layout.activity_thanh_toan);
 
+        // Click vào icon mũi tên để quay về trang trước đó bằng cách finish activity hiện tại
         ImageView imgView_QuayVe_ThanhToan = findViewById(R.id.imgView_QuayVe_ThanhToan);
         imgView_QuayVe_ThanhToan.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,18 +70,23 @@ public class ThanhToanActivity extends AppCompatActivity
             }
         });
 
+        // Khởi tạo các text view
         txtView_Ten_ThanhToan = findViewById(R.id.txtView_Ten_ThanhToan);
         txtView_SDT_ThanhToan = findViewById(R.id.txtView_SDT_ThanhToan);
         txtView_Email_ThanhToan = findViewById(R.id.txtView_Email_ThanhToan);
         txtView_DiaChi_ThanhToan = findViewById(R.id.txtView_DiaChi_ThanhToan);
+        // Chạy hàm lấy dữ liệu tài khoản và set lên activity
         GetDataTaiKhoan();
 
+        // Khởi tạo shared preferences có tên dataGiaoHang, chế độ MODE_PRIVATE
         sharedPreferences = getSharedPreferences("dataGiaoHang", MODE_PRIVATE);
+        // Click để chuyển đến trang sửa thông tin nhận hàng
         ImageView imgView_ChonDiaChiNhanHang_ThanhToan = findViewById(R.id.imgView_ChonDiaChiNhanHang_ThanhToan);
         imgView_ChonDiaChiNhanHang_ThanhToan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view)
             {
+                // Lưu trữ dữ liệu tên, số điện thoại, email, địa chỉ vào Shared Preferences
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putString("ten", String.valueOf(txtView_Ten_ThanhToan.getText()));
                 editor.putString("sdt", String.valueOf(txtView_SDT_ThanhToan.getText()));
@@ -91,11 +101,15 @@ public class ThanhToanActivity extends AppCompatActivity
             }
         });
 
+        // Khởi tạo các biến text view
         txtView_TienHang_ThanhToan = findViewById(R.id.txtView_TienHang_ThanhToan);
         txtView_PhiVanChuyen_ThanhToan = findViewById(R.id.txtView_PhiVanChuyen_ThanhToan);
         txtView_GiaTongCong_ThanhToan = findViewById(R.id.txtView_GiaTongCong_ThanhToan);
+        // Khởi tạo mảng giỏ hàng dùng để hiển thị thông tin giỏ hàng hiện tại
         arr_GioHang = new ArrayList<>();
+        // Lấy dữ liệu giỏ hàng hiện tại và set dữ liệu đó lên activity
         GetDataSanPhamGioHang();
+
 
         txtView_PhuongThucThanhToan_ThanhToan = findViewById(R.id.txtView_PhuongThucThanhToan_ThanhToan);
         String ptttMacDinh = "Thanh toán tiền mặt";
@@ -189,10 +203,11 @@ public class ThanhToanActivity extends AppCompatActivity
         }
     }
 
+    // Hàm lấy dữ liệu tài khoản
     private void GetDataTaiKhoan()
     {
         // Lấy dữ liệu trên firebase
-        dbref = FirebaseDatabase.getInstance().getReference("TaiKhoan/" + Global.getTenTaiKhoan());
+        dbref = FirebaseDatabase.getInstance().getReference("TaiKhoan/" + Global.getTk().getTenTaiKhoan());
         dbref.addValueEventListener(new ValueEventListener()
         {
             @Override
@@ -202,7 +217,7 @@ public class ThanhToanActivity extends AppCompatActivity
                 TaiKhoan tk = snapshot.getValue(TaiKhoan.class);
 
                 if(tk != null) {
-                    // Sau khi đã lấy hết dữ liệu tài khoản thì
+                    // Sau khi đã lấy hết dữ liệu tài khoản thì set dữ liệu lên activity
                     txtView_Ten_ThanhToan.setText(tk.getTen());
                     txtView_SDT_ThanhToan.setText(tk.getSDT());
                     txtView_Email_ThanhToan.setText(tk.getEmail());
@@ -217,16 +232,22 @@ public class ThanhToanActivity extends AppCompatActivity
         });
     }
 
+    // Hàm tính tổng tiền giỏ hàng
     private void TinhTongTien(ArrayList<GioHang> arr_GioHang)
     {
+        // Phí vận chuyển mặc định là 30000
         int pvch = 30000;
         String pvch1 = String.valueOf(pvch);
+        // Set dữ liệu phí vận chuyển
         txtView_PhiVanChuyen_ThanhToan.setText(pvch1);
 
+        // Lấy kích thước giỏ hàng bỏ vào biến size để xác định kích thước giỏ
         int size = arr_GioHang.size();
+        // Khởi tạo biến giá hàng trong giỏ và giá thành tiền ban đầu tương ứng là 0 và 30000
         final int[] giahang = {0};
         final int[] giatong = {pvch};
 
+        // Duyệt qua giỏ
         for(int i = 0; i < size; i++)
         {
             int id = arr_GioHang.get(i).getIdSanPham();
@@ -239,8 +260,10 @@ public class ThanhToanActivity extends AppCompatActivity
                 {
                     int gia = snapshot.getValue(Integer.class);
 
+                    // Cộng giá sản phẩm trong giỏ nhân với số lượng vào giá tổng
                     giahang[0] = giahang[0] + gia * arr_GioHang.get(finalI).getSoLuong();
                     giatong[0] = giatong[0] + gia * arr_GioHang.get(finalI).getSoLuong();
+                    // Set giá tổng
                     txtView_TienHang_ThanhToan.setText(String.valueOf(giahang[0]));
                     txtView_GiaTongCong_ThanhToan.setText(String.valueOf(giatong[0]));
                 }
@@ -253,45 +276,45 @@ public class ThanhToanActivity extends AppCompatActivity
         }
     }
 
+    // Hàm lấy dữ liệu giỏ hàng
     private void GetDataSanPhamGioHang()
     {
-        // Lấy dữ liệu sản phẩm trong giỏ và đổ lên recycler view
-        // initialisation with id's
+        // Khởi tạo biến recycler view
         recyclerView_SanPhamTrongGio_ThanhToan = findViewById(R.id.recyclerView_SanPhamTrongGio_ThanhToan);
-        // Layout Manager
+        // Khởi tạo biến recycler view layout manager
         RecyclerView.LayoutManager recyclerViewLayoutManager = new LinearLayoutManager(getApplicationContext());
 
-        // Set LayoutManager on Recycler View
+        // Set LayoutManager cho Recycler View
         recyclerView_SanPhamTrongGio_ThanhToan.setLayoutManager(recyclerViewLayoutManager);
 
-        // Set Horizontal Layout Manager
-        // for Recycler view
-        // Linear Layout Manager
+        // Set Vertical Layout Manager cho Recycler view
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(ThanhToanActivity.this, LinearLayoutManager.VERTICAL, false);
         recyclerView_SanPhamTrongGio_ThanhToan.setLayoutManager(linearLayoutManager);
 
-        // Lấy dữ liệu trên firebase và thêm vào array list
-        dbref = FirebaseDatabase.getInstance().getReference("GioHang/" + Global.getTenTaiKhoan());
+        // Lấy dữ liệu trên firebase theo đường dẫn GioHang/tên tài khoản và thêm vào array list
+        dbref = FirebaseDatabase.getInstance().getReference("GioHang/" + Global.getTk().getTenTaiKhoan());
         dbref.addValueEventListener(new ValueEventListener()
         {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot)
             {
-                // Lấy dữ liệu của các sản phẩm trong giỏ
-                // Làm trống mảng
+                // Lấy dữ liệu của các sản phẩm có cùng danh mục với sản phẩm đang được hiển thị thông tin chi tiết
+                // Làm trống mảng để khi dữ liệu trên firebase có sự thay đổi thì add dữ liệu vào mảng sẽ không làm dữ liệu trong mảng bị trùng lặp
                 arr_GioHang.clear();
 
                 for (DataSnapshot dataSnapshot : snapshot.getChildren())
                 {
+                    // Lấy dữ liệu thêm vào array giỏ
                     GioHang gh = dataSnapshot.getValue(GioHang.class);
                     arr_GioHang.add(gh);
                 }
 
-                // Sau khi đã lấy hết dữ liệu xuống mảng thì dùng adapter để đổ dữ liệu lên recycler view
+                // Sau khi đã lấy hết dữ liệu xuống mảng thì dùng adapter để set dữ liệu lên recycler view
                 sanPhamThanhToanAdapter = new SanPhamThanhToanAdapter(arr_GioHang);
-                // Set adapter on recycler view
+                // Dùng adapter để set dữ liệu cho recycler view các sản phẩm trong giỏ
                 recyclerView_SanPhamTrongGio_ThanhToan.setAdapter(sanPhamThanhToanAdapter);
 
+                // Chạy hàm tính tổng tiền sản phẩm trong giỏ
                 TinhTongTien(arr_GioHang);
             }
 
@@ -302,8 +325,10 @@ public class ThanhToanActivity extends AppCompatActivity
         });
     }
 
+    // Hàm thêm đơn đặt hàng và xóa giỏ hàng hiện tại
     private void ThemDonDatHang()
     {
+        // Kết nối firebase với đường dẫn HoaDon
         dbref = FirebaseDatabase.getInstance().getReference("HoaDon");
         dbref.addListenerForSingleValueEvent(new ValueEventListener()
         {
@@ -316,9 +341,12 @@ public class ThanhToanActivity extends AppCompatActivity
                     hd = dataSnapshot.getValue(HoaDon.class);
                 }
 
+                // Kiểm tra đã có hóa đơn nào trong database chưa
+                // Nếu đã có
                 if(hd != null)
                 {
                     // Lấy id hóa đơn từ hàm tự tăng để có id hóa đơn ko trùng với id các hóa đơn cũ
+                    // Lấy id hd từ hóa đơn cuối cùng trong database
                     Query query = dbref.limitToLast(1);
                     query.addListenerForSingleValueEvent(new ValueEventListener()
                     {
@@ -330,6 +358,7 @@ public class ThanhToanActivity extends AppCompatActivity
                                 HoaDon hd = dataSnapshot.getValue(HoaDon.class);
                                 if (hd != null)
                                 {
+                                    // id hóa đơn lớn nhất hiện tại được cộng thêm 1 để ra idhd không trùng
                                     int idhd = hd.getIdHoaDon();
                                     idhd++;
                                     // Lấy thời gian hiện tại ở Việt Nam
@@ -340,7 +369,7 @@ public class ThanhToanActivity extends AppCompatActivity
                                     // Kiểm tra phương thức thanh toán có phải tiền mặt hay không
                                     boolean tienMat = String.valueOf(txtView_PhuongThucThanhToan_ThanhToan.getText()).equals("Thanh toán tiền mặt");
                                     // Tạo object HoaDon
-                                    HoaDon hd1 = new HoaDon(idhd, Global.getTenTaiKhoan(), ngaylaphd, Integer.parseInt(String.valueOf(txtView_PhiVanChuyen_ThanhToan.getText())), Integer.parseInt(String.valueOf(txtView_GiaTongCong_ThanhToan.getText())), 0, tienMat, String.valueOf(txtView_Ten_ThanhToan.getText()), String.valueOf(txtView_SDT_ThanhToan.getText()), String.valueOf(txtView_Email_ThanhToan.getText()), String.valueOf(txtView_DiaChi_ThanhToan.getText()), String.valueOf(editTxt_GhiChu_ThanhToan.getText()));
+                                    HoaDon hd1 = new HoaDon(idhd, Global.getTk().getTenTaiKhoan(), ngaylaphd, Integer.parseInt(String.valueOf(txtView_PhiVanChuyen_ThanhToan.getText())), Integer.parseInt(String.valueOf(txtView_GiaTongCong_ThanhToan.getText())), 0, tienMat, String.valueOf(txtView_Ten_ThanhToan.getText()), String.valueOf(txtView_SDT_ThanhToan.getText()), String.valueOf(txtView_Email_ThanhToan.getText()), String.valueOf(txtView_DiaChi_ThanhToan.getText()), String.valueOf(editTxt_GhiChu_ThanhToan.getText()));
                                     // Thiết lập reference
                                     dbref = FirebaseDatabase.getInstance().getReference("HoaDon/" + idhd);
                                     // Cập nhật dữ liệu lên firebase
@@ -349,7 +378,7 @@ public class ThanhToanActivity extends AppCompatActivity
                                     // Thêm giỏ hàng vào chi tiết hóa đơn
                                     int finalIdhd = idhd;
                                     arr_GioHang.clear();
-                                    dbref = FirebaseDatabase.getInstance().getReference("GioHang/" + Global.getTenTaiKhoan());
+                                    dbref = FirebaseDatabase.getInstance().getReference("GioHang/" + Global.getTk().getTenTaiKhoan());
                                     dbref.addListenerForSingleValueEvent(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -378,7 +407,7 @@ public class ThanhToanActivity extends AppCompatActivity
                                     });
 
                                     // Xóa giỏ hàng hiện tại
-                                    dbref = FirebaseDatabase.getInstance().getReference("GioHang/" + Global.getTenTaiKhoan());
+                                    dbref = FirebaseDatabase.getInstance().getReference("GioHang/" + Global.getTk().getTenTaiKhoan());
                                     dbref.removeValue();
 
                                     Toast.makeText(getApplicationContext(),"Đặt hàng thành công", Toast.LENGTH_SHORT).show();
@@ -408,7 +437,7 @@ public class ThanhToanActivity extends AppCompatActivity
                     // Kiểm tra phương thức thanh toán có phải tiền mặt hay không
                     boolean tienMat = String.valueOf(txtView_PhuongThucThanhToan_ThanhToan.getText()).equals("Thanh toán tiền mặt");
                     // Tạo object HoaDon
-                    HoaDon hd1 = new HoaDon(1, Global.getTenTaiKhoan(), ngaylaphd, Integer.parseInt(String.valueOf(txtView_PhiVanChuyen_ThanhToan.getText())), Integer.parseInt(String.valueOf(txtView_GiaTongCong_ThanhToan.getText())), 0, tienMat, String.valueOf(txtView_Ten_ThanhToan.getText()), String.valueOf(txtView_SDT_ThanhToan.getText()), String.valueOf(txtView_Email_ThanhToan.getText()), String.valueOf(txtView_DiaChi_ThanhToan.getText()), String.valueOf(editTxt_GhiChu_ThanhToan.getText()));
+                    HoaDon hd1 = new HoaDon(1, Global.getTk().getTenTaiKhoan(), ngaylaphd, Integer.parseInt(String.valueOf(txtView_PhiVanChuyen_ThanhToan.getText())), Integer.parseInt(String.valueOf(txtView_GiaTongCong_ThanhToan.getText())), 0, tienMat, String.valueOf(txtView_Ten_ThanhToan.getText()), String.valueOf(txtView_SDT_ThanhToan.getText()), String.valueOf(txtView_Email_ThanhToan.getText()), String.valueOf(txtView_DiaChi_ThanhToan.getText()), String.valueOf(editTxt_GhiChu_ThanhToan.getText()));
                     // Thiết lập reference
                     dbref = FirebaseDatabase.getInstance().getReference("HoaDon/1");
                     // Cập nhật dữ liệu lên firebase
@@ -416,7 +445,7 @@ public class ThanhToanActivity extends AppCompatActivity
 
                     // Thêm giỏ hàng vào chi tiết hóa đơn
                     arr_GioHang.clear();
-                    dbref = FirebaseDatabase.getInstance().getReference("GioHang/" + Global.getTenTaiKhoan());
+                    dbref = FirebaseDatabase.getInstance().getReference("GioHang/" + Global.getTk().getTenTaiKhoan());
                     dbref.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -445,7 +474,7 @@ public class ThanhToanActivity extends AppCompatActivity
                     });
 
                     // Xóa giỏ hàng hiện tại
-                    dbref = FirebaseDatabase.getInstance().getReference("GioHang/" + Global.getTenTaiKhoan());
+                    dbref = FirebaseDatabase.getInstance().getReference("GioHang/" + Global.getTk().getTenTaiKhoan());
                     dbref.removeValue();
 
                     Toast.makeText(getApplicationContext(),"Đặt hàng thành công", Toast.LENGTH_SHORT).show();

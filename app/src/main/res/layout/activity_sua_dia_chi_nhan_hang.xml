@@ -48,7 +48,7 @@
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:padding="8dp"
-                android:layout_marginBottom="30dp"/>
+                android:layout_marginBottom="15dp"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -87,7 +87,7 @@
                 android:textSize="24sp"
                 android:padding="8dp"
                 android:layout_marginBottom="40dp"
-                android:inputType="numberDecimal"/>
+                android:inputType="number"/>
 
             <TextView
                 android:layout_width="match_parent"

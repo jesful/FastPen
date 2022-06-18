@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="5dp"
+    android:background="@color/white"
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:weightSum="10"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/textView_MaHoaDon_HoaDon"
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            android:layout_height="wrap_content"
+            android:text="Mã:"
+            android:textColor="#938C8C"
+            android:textSize="23sp">
+        </TextView>
+        <TextView
+            android:id="@+id/textView_NgayDatHang_HoaDon"
+            android:layout_width="0dp"
+            android:layout_weight="7"
+            android:layout_height="wrap_content"
+            android:text="Ngày đặt hàng:"
+            android:textColor="#938C8C"
+            android:textSize="23sp">
+        </TextView>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textView_PhiVanChuyen_HoaDon"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:text="Phí vận chuyển:"
+        android:textColor="@color/teal_200"
+        android:textSize="23sp">
+    </TextView>
+    <TextView
+        android:id="@+id/textView_TongTien_HoaDon"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:text="Tổng tiền:"
+        android:textColor="#FA0202"
+        android:textSize="25sp">
+    </TextView>
+    <TextView
+        android:id="@+id/textView_TienMat_HoaDon"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:text="Tiền mặt:"
+        android:textColor="#09F4B2"
+        android:textSize="23sp">
+    </TextView>
+    <TextView
+        android:id="@+id/textView_TranThai_HoaDon"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:text="Trạng thái:"
+        android:textColor="#08EA0C"
+        android:textSize="23sp">
+    </TextView>
+
+
+
+</LinearLayout>

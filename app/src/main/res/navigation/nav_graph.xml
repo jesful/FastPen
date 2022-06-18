@@ -11,4 +11,14 @@
         android:name="hcmute.edu.vn.fastpen.Fragment.TrangChuFragment"
         android:label="fragment_trang_chu"
         tools:layout="@layout/fragment_trang_chu" />
+    <fragment
+        android:id="@+id/lichSuFragment"
+        android:name="hcmute.edu.vn.fastpen.Fragment.LichSuFragment"
+        android:label="fragment_lich_su"
+        tools:layout="@layout/fragment_lich_su" />
+    <fragment
+        android:id="@+id/taiKhoanFragment"
+        android:name="hcmute.edu.vn.fastpen.Fragment.TaiKhoanFragment"
+        android:label="fragment_tai_khoan"
+        tools:layout="@layout/fragment_tai_khoan" />
 </navigation>
